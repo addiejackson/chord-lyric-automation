@@ -1,7 +1,9 @@
 <template>
   <div class="hello">
     <div v-for="(lyric, idx) in lyrics" :key="idx">
-      <ChordLine /><br />
+      <ChordLine :lyric="lyric" />
+      <br />
+      <br />
       <LyricLine :lyric="lyric" />
     </div>
   </div>

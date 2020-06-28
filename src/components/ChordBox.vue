@@ -1,9 +1,7 @@
 <template>
   <div>
-    <p>Addie's ChordBox Yo</p>
     <form>
       <div>
-        <label for="chordbox">Chord:</label>
         <input
           type="text"
           :size="chordBoxSize"
@@ -28,6 +26,7 @@ export default {
       if (this.chordBoxSize <= 1) {
         this.chordBoxSize = 1;
       }
+      this.$emit("chordEntered", this.chordInput);
     }
   }
 };
