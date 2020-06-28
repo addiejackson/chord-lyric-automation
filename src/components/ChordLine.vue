@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-for="index in wordCount" :key="index" class="sameLine">
-      <ChordBox @chordEntered="Gus" />
+      <ChordBox
+        @chordEntered="captureChord($event, index - 1)"
+        :style="'padding-right:' + spaces[index - 1] + 'ch;'"
+      />
     </div>
   </div>
 </template>
@@ -14,11 +17,12 @@ export default {
   data: () => ({
     wordCount: 1,
     content: "x",
-    chordArray: [] // will need to capture this from ChordBox
+    chordArray: null // will need to capture this from ChordBox
   }),
   props: {
     lyric: String,
-    spaces: Array
+    spaces: Array,
+    line: Number
   },
   methods: {
     countWords() {
@@ -26,21 +30,32 @@ export default {
       if (this.wordCount < 1) {
         this.wordCount = 1;
       }
-      console.log(this.wordCount);
     },
-    Gus() {
-      console.log("fakers");
+    captureChord(val, index) {
+      this.chordArray[index] = val;
+      this.compareLyricsAndChords();
+      this.$emit("chordsEntered", this.chordArray);
+    },
+    compareLyricsAndChords(index) {
+      let l = this.lyric.split(" ");
+      let c = this.chordArray;
+      if (l[index] > c[index]) {
+        this.spaces[index] = this.spaces[index] - (l[index] - c[index]);
+      } else {
+        this.spaces[index] = 1;
+      }
     }
   },
   mounted() {
     this.countWords();
+    this.chordArray = Array(this.wordCount);
     this.spaces.forEach((space) => {
       for (let i = 0; i < space; i++) {
         this.content += "\xa0";
       }
       this.content += "x";
-      this.chordArray.push(this.content);
     });
+    console.log(this.spaces);
   },
   components: {
     ChordBox

@@ -1,12 +1,15 @@
 <template>
   <div class="hello">
     <div v-for="(lyric, idx) in lyrics" :key="idx">
-      <ChordLine :spaces="allSpaces[idx]" :lyric="lyric" />
+      <ChordLine
+        :spaces="allSpaces[idx]"
+        :line="idx"
+        :lyric="lyric"
+        @chordsEntered="captureChords"
+      />
       <br />
       <br />
-      <br />
-      <br />
-      <LyricLine :lyric="lyric" style="padding-top:0px;" />
+      <LyricLine :lyric="lyric" :chordArray="chordArray" />
     </div>
   </div>
 </template>
@@ -17,10 +20,16 @@ import LyricLine from "@/components/LyricLine.vue";
 export default {
   name: "ComboLine",
   data: () => ({
-    allSpaces: []
+    allSpaces: [],
+    chordArray: null
   }),
   props: {
     lyrics: Array
+  },
+  methods: {
+    captureChords(val) {
+      this.chordArray = val;
+    }
   },
   watch: {
     lyrics: function calculateSpaces() {
