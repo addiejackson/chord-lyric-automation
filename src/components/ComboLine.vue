@@ -4,7 +4,9 @@
       <ChordLine :lyric="lyric" />
       <br />
       <br />
-      <LyricLine :lyric="lyric" />
+      <br />
+      <br />
+      <LyricLine :lyric="lyric" style="padding-top:0px;" />
     </div>
   </div>
 </template>
@@ -29,5 +31,7 @@ export default {
 div {
   font-family: "Courier New", Courier, monospace;
   text-align: left;
+  line-height: 11px;
+  font-size: 16px;
 }
 </style>

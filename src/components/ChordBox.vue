@@ -2,6 +2,8 @@
   <div>
     <form>
       <div>
+        <br />
+
         <input
           type="text"
           :size="chordBoxSize"
@@ -36,5 +38,15 @@ export default {
 input[type="text"] {
   font-size: 16px;
   font-family: monospace, "Courier New";
+  border: none;
+  border-bottom: 1px solid gray;
+  border-radius: 2px;
+  padding-left: 0px;
+  background-color: lightgrey;
+  text-align: left;
+}
+
+input[type="text"]:focus {
+  background-color: lightblue;
 }
 </style>
