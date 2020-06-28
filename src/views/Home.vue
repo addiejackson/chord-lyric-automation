@@ -1,18 +1,28 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <LyricInput @lyricsDone="captureLyrics"></LyricInput>
+    <ComboLine :lyrics="lyrics"></ComboLine>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ComboLine from "@/components/ComboLine.vue";
+import LyricInput from "@/components/LyricInput.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
+  data: () => ({
+    lyrics: null
+  }),
+  methods: {
+    captureLyrics(lyrics) {
+      this.lyrics = lyrics;
+    }
+  },
   components: {
-    HelloWorld
+    ComboLine,
+    LyricInput
   }
-}
+};
 </script>
