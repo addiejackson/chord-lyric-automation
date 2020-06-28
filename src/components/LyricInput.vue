@@ -18,6 +18,7 @@ export default {
   methods: {
     lyricsDone() {
       this.lyricArray = this.lyrics.split("\n");
+      this.lyrics = "";
       this.$emit("lyricsDone", this.lyricArray);
     }
   }
