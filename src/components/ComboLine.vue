@@ -9,7 +9,13 @@
       />
       <br />
       <br />
-      <LyricLine :lyric="lyric" :chordArray="chordArray" />
+      <br />
+      <br />
+      <LyricLine
+        :lyric="lyric"
+        :chordArray="chordArray"
+        style="padding-top:0px;"
+      />
     </div>
   </div>
 </template>
