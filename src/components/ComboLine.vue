@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div v-for="(lyric, idx) in lyrics" :key="idx">
-      <ChordLine :spaces="spaces" :lyric="lyric" />
+      <ChordLine :spaces="allSpaces[idx]" :lyric="lyric" />
       <br />
       <br />
       <br />
@@ -17,7 +17,7 @@ import LyricLine from "@/components/LyricLine.vue";
 export default {
   name: "ComboLine",
   data: () => ({
-    spaces: []
+    allSpaces: []
   }),
   props: {
     lyrics: Array
@@ -26,7 +26,7 @@ export default {
     lyrics: function calculateSpaces() {
       this.lyrics.forEach((lyric) => {
         let words = lyric.split(" ");
-        this.spaces.push(words.map((x) => x.length));
+        this.allSpaces.push(words.map((x) => x.length));
       });
     }
   },

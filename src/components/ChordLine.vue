@@ -12,10 +12,13 @@ export default {
   name: "ChordLine",
 
   data: () => ({
-    wordCount: 1
+    wordCount: 1,
+    content: "x",
+    chordArray: [] // will need to capture this from ChordBox
   }),
   props: {
-    lyric: String
+    lyric: String,
+    spaces: Array
   },
   methods: {
     countWords() {
@@ -31,6 +34,13 @@ export default {
   },
   mounted() {
     this.countWords();
+    this.spaces.forEach((space) => {
+      for (let i = 0; i < space; i++) {
+        this.content += "\xa0";
+      }
+      this.content += "x";
+      this.chordArray.push(this.content);
+    });
   },
   components: {
     ChordBox
