@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <LyricInput @lyricsDone="captureLyrics"></LyricInput>
-    <ComboLine :lyrics="lyrics"></ComboLine>
+    <ComboLine :lyrics="lyrics" style="margin-left:20%"></ComboLine>
   </div>
 </template>
 
