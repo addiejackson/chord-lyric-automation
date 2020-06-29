@@ -3,7 +3,7 @@
     <div v-for="index in wordCount" :key="index" class="sameLine">
       <ChordBox
         @chordEntered="captureChord($event, index)"
-        :style="'padding-right:' + (spaces[index - 1] - 1).toString() + 'ch;'"
+        :style="'padding-right:' + spaces[index - 1].toString() + 'ch;'"
       />
     </div>
   </div>
@@ -43,9 +43,9 @@ export default {
       }
       if (l[index].length > c[index].length) {
         this.spaces[index] =
-          this.spaces[index] - (l[index].length - c[index].length) - 1;
+          this.spaces[index] - (l[index].length - c[index].length);
       } else {
-        this.spaces[index] = 0;
+        this.spaces[index] = 1;
       }
     }
   },

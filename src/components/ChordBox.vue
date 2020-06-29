@@ -1,18 +1,15 @@
 <template>
-  <div>
-    <form>
-      <div>
-        <br />
-        <input
-          type="text"
-          :size="chordBoxSize"
-          name="chordbox"
-          v-model="chordInput"
-          @input="resizeInput"
-        />
-      </div>
-    </form>
-  </div>
+  <span>
+    <br />
+    <input
+      type="text"
+      :size="chordBoxSize"
+      :style="'width:' + chordBoxSize + 'ch;'"
+      name="chordbox"
+      v-model="chordInput"
+      @input="resizeInput"
+    />
+  </span>
 </template>
 
 <script>
@@ -44,10 +41,11 @@ input[type="text"] {
   border-radius: 1px;
   background-color: lightgrey;
   padding: 0;
+  box-sizing: content-box;
 }
 
 input[type="text"]:focus {
   background-color: paleturquoise;
-  border: 1px solid black;
+  border: 0;
 }
 </style>
