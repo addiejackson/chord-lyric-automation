@@ -37,13 +37,13 @@ export default {
 <style>
 input[type="text"] {
   font-size: 16px;
-  font-family: monospace, "Courier New";
+  font-weight: 300;
+  font-family: "Courier New", Courier, monospace;
   border: none;
   border-bottom: 1px solid gray;
   border-radius: 1px;
   background-color: lightgrey;
-  margin-left: -2px;
-  width: 87.5%;
+  padding: 0;
 }
 
 input[type="text"]:focus {
