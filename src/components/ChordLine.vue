@@ -2,7 +2,7 @@
   <div>
     <div v-for="index in wordCount" :key="index" class="sameLine">
       <ChordBox
-        @chordEntered="captureChord($event, index)"
+        @chordEntered="captureChord($event, index-1)"
         :style="'padding-right:' + spaces[index - 1].toString() + 'ch;'"
       />
     </div>
@@ -31,7 +31,7 @@ export default {
       }
     },
     captureChord(val, index) {
-      this.chords.splice(index - 1, 1, val);
+      this.chords.splice(index, 1, val);
       this.compareLyricsAndChords(index);
       this.$emit("chordsEntered", this.chords);
     },
@@ -39,13 +39,12 @@ export default {
       let l = this.lyric.split(" ");
       let c = this.chords;
       if (typeof c[index] === "undefined") {
-        c[index] = "1";
+        c.splice(index, 1, "1");
       }
       if (l[index].length > c[index].length) {
-        this.spaces[index] =
-          this.spaces[index] - (l[index].length - c[index].length);
+        this.spaces.splice(index, 1, l[index].length - c[index].length + 1);
       } else {
-        this.spaces[index] = 1;
+        this.spaces.splice(index, 1, 1);
       }
     }
   },

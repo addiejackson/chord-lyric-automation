@@ -5,17 +5,13 @@
         :spaces="allSpaces[idx]"
         :line="idx"
         :lyric="lyric"
-        @chordsEntered="captureChords"
+        @chordsEntered="captureChords($event, idx)"
       />
       <br />
       <br />
       <br />
       <br />
-      <LyricLine
-        :lyric="lyric"
-        :chordArray="chordArray"
-        style="padding-top:0px;"
-      />
+      <LyricLine :lyric="lyric" :chordArray="chordArray[idx]" style="padding-top:0px;" />
     </div>
   </div>
 </template>
@@ -27,22 +23,23 @@ export default {
   name: "ComboLine",
   data: () => ({
     allSpaces: [],
-    chordArray: null
+    chordArray: []
   }),
   props: {
     lyrics: Array
   },
   methods: {
-    captureChords(val) {
-      this.chordArray = val;
+    captureChords(chords, index) {
+      this.chordArray.splice(index, 1, chords);
     }
   },
   watch: {
     lyrics: function calculateSpaces() {
-      this.lyrics.forEach((lyric) => {
+      this.lyrics.forEach(lyric => {
         let words = lyric.split(" ");
-        this.allSpaces.push(words.map((x) => x.length));
+        this.allSpaces.push(words.map(x => x.length));
       });
+      console.log(this.allSpaces);
     }
   },
   components: {

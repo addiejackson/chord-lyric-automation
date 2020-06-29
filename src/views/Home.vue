@@ -1,6 +1,14 @@
 <template>
   <div class="home">
-    <LyricInput @lyricsDone="captureLyrics"></LyricInput>
+    <LyricInput @lyricsDone="captureLyrics" @titleEntered="captureTitle"></LyricInput>
+    <br />
+    <br />
+    <div>
+      <h1>{{title}}</h1>
+    </div>
+    <br />
+    <br />
+    <br />
     <ComboLine :lyrics="lyrics" style="margin-left:20%"></ComboLine>
   </div>
 </template>
@@ -13,11 +21,15 @@ import LyricInput from "@/components/LyricInput.vue";
 export default {
   name: "Home",
   data: () => ({
-    lyrics: null
+    lyrics: null,
+    title: ""
   }),
   methods: {
     captureLyrics(lyrics) {
       this.lyrics = lyrics;
+    },
+    captureTitle(value) {
+      this.title = value;
     }
   },
   components: {
@@ -26,3 +38,13 @@ export default {
   }
 };
 </script>
+
+<style>
+h1 {
+  float: left;
+  margin-left: 20%;
+  text-align: left;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 20px;
+}
+</style>
