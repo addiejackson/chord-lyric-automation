@@ -1,19 +1,15 @@
 <template>
-  <div>
-    <form>
-      <div>
-        <br />
-
-        <input
-          type="text"
-          :size="chordBoxSize"
-          name="chordbox"
-          v-model="chordInput"
-          @input="resizeInput"
-        />
-      </div>
-    </form>
-  </div>
+  <span>
+    <br />
+    <input
+      type="text"
+      :size="chordBoxSize"
+      :style="'width:' + chordBoxSize + 'ch;'"
+      name="chordbox"
+      v-model="chordInput"
+      @input="resizeInput"
+    />
+  </span>
 </template>
 
 <script>
@@ -24,6 +20,7 @@ export default {
   }),
   methods: {
     resizeInput() {
+      console.log(this.chordInput);
       this.chordBoxSize = this.chordInput.length;
       if (this.chordBoxSize <= 1) {
         this.chordBoxSize = 1;
@@ -37,16 +34,18 @@ export default {
 <style>
 input[type="text"] {
   font-size: 16px;
-  font-family: monospace, "Courier New";
+  font-weight: 300;
+  font-family: "Courier New", Courier, monospace;
   border: none;
   border-bottom: 1px solid gray;
-  border-radius: 2px;
-  padding-left: 0px;
+  border-radius: 1px;
   background-color: lightgrey;
-  text-align: left;
+  padding: 0;
+  box-sizing: content-box;
 }
 
 input[type="text"]:focus {
-  background-color: lightblue;
+  background-color: paleturquoise;
+  border: 0;
 }
 </style>
