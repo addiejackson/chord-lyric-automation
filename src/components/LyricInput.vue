@@ -2,7 +2,13 @@
   <div>
     <label for="lyrics">Type your lyrics:</label>
     <br />
-    <textarea id="lyrics" name="lyrics" v-model="lyrics" rows="5" cols="33"></textarea>
+    <textarea
+      id="lyrics"
+      name="lyrics"
+      v-model="lyrics"
+      rows="5"
+      cols="33"
+    ></textarea>
     <br />
     <button @click="lyricsDone()">Submit Lyrics</button>
     <span>{{ lyricArray }}</span>
