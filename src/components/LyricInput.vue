@@ -11,7 +11,6 @@
     ></textarea>
     <br />
     <button @click="lyricsDone()">Submit Lyrics</button>
-    <span>{{ lyricArray }}</span>
   </div>
 </template>
 

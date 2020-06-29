@@ -40,13 +40,14 @@ input[type="text"] {
   font-family: monospace, "Courier New";
   border: none;
   border-bottom: 1px solid gray;
-  border-radius: 2px;
-  padding-left: 0px;
+  border-radius: 1px;
   background-color: lightgrey;
-  text-align: left;
+  margin-left: -2px;
+  width: 87.5%;
 }
 
 input[type="text"]:focus {
-  background-color: lightblue;
+  background-color: paleturquoise;
+  border: 1px solid black;
 }
 </style>
