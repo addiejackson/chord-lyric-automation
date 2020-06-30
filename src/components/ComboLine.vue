@@ -5,6 +5,7 @@
         :spaces="allSpaces[idx]"
         :line="idx"
         :lyric="lyric"
+        :transposeN="transposeN"
         @chordsEntered="captureChords($event, idx)"
       />
       <br />
@@ -26,7 +27,8 @@ export default {
     chordArray: []
   }),
   props: {
-    lyrics: Array
+    lyrics: Array,
+    transposeN: Number
   },
   methods: {
     captureChords(chords, index) {

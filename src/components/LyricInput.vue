@@ -9,6 +9,10 @@
       v-model="title"
       placeholder="Project/Song Title"
     />
+    <div style="margin-right:20%;">
+      <button @click="transposeUp()" name="transposeUp">Transpose Up</button>
+      <button @click="transposeDown()" name="transposeDown">Transpose Down</button>
+    </div>
     <br />
     <!-- <label for="lyrics" style="text-align:left; margin-left:20%; float:left;">Type your lyrics:</label> -->
     <br />
@@ -22,7 +26,7 @@
     ></textarea>
     <br />
     <br />
-    <button @click="lyricsDone(); titleEntered()">Submit Lyrics</button>
+    <button @click="lyricsDone(); titleEntered()" name="submitLyrics">Submit Lyrics</button>
   </div>
 </template>
 
@@ -31,7 +35,8 @@ export default {
   data: () => ({
     lyrics: "",
     lyricArray: null,
-    title: ""
+    title: "",
+    transposeN: 0
   }),
   methods: {
     lyricsDone() {
@@ -41,12 +46,30 @@ export default {
     },
     titleEntered() {
       this.$emit("titleEntered", this.title);
+    },
+    transposeUp() {
+      this.transposeN = this.transposeN + 1;
+      this.$emit("transposeChanged", this.transposeN);
+    },
+    transposeDown() {
+      this.transposeN = this.transposeN - 1;
+      this.$emit("transposeChanged", this.transposeN);
     }
   }
 };
 </script>
 
 <style scoped>
+input[type="text"] {
+  text-align: left;
+  background-color: white;
+  border: none;
+  border-bottom: 0.5px solid #a1a1a1;
+  float: left;
+  margin-left: 19.75%;
+  border-radius: 0;
+  width: 15%;
+}
 textarea {
   font-family: "Courier New", Courier, monospace;
   font-size: 16px;
@@ -55,27 +78,45 @@ textarea {
   border-radius: 2px;
   padding-top: 3px;
 }
-button {
+button[name="transposeUp"] {
   background-color: #42b983;
   border: none;
   text-align: center;
   color: white;
-  font-size: 16px;
-  width: auto;
+  font-size: 14px;
+  width: 150px;
   border-radius: 2px;
-  float: left;
-  margin-left: 20%;
+  float: right;
+  cursor: pointer;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-bottom: 3px;
+}
+button[name="transposeDown"] {
+  background-color: #42b983;
+  border: none;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  width: 150px;
+  border-radius: 2px;
+  float: right;
   cursor: pointer;
   padding-top: 3px;
   padding-bottom: 3px;
 }
-input[type="text"] {
-  text-align: left;
-  background-color: white;
+button[name="submitLyrics"] {
+  background-color: #42b983;
   border: none;
-  border-bottom: 0.5px solid #a1a1a1;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  width: auto;
+  border-radius: 2px;
   float: left;
-  margin-left: 20%;
-  border-radius: 0;
+  margin-left: 19.9%;
+  cursor: pointer;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 </style>
