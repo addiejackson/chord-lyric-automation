@@ -1,33 +1,90 @@
 <template>
-  <div>
-    <br />
-    <br />
-    <input
-      id="titlebox"
-      type="text"
-      name="titlebox"
-      v-model="title"
-      placeholder="Project/Song Title"
-    />
-    <div style="margin-right:20%;">
-      <button @click="transposeUp()" name="transposeUp">Transpose Up</button>
-      <button @click="transposeDown()" name="transposeDown">Transpose Down</button>
-    </div>
+  <v-container class="py-0 mt-6" style="max-width:1050px;">
+    <v-row align="center">
+      <v-col class="py-0 my-0" cols="8">
+        <p><b> Get them chords, yo</b></p>
+      </v-col>
+      <v-col class="py-0 my-0" cols="2" offset="2">
+        <v-btn
+          class="py-1 my-0"
+          small
+          depressed
+          block
+          :disabled="disableTranspose"
+          color="#5F917A"
+          style="color:white;"
+          @click="transposeUp()"
+          name="transposeUp"
+          >Transpose Up
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row align="center">
+      <v-col cols="8" class="py-0 my-0">
+        <v-text-field
+          class="py-0 my-0"
+          id="titlebox"
+          type="text"
+          name="titlebox"
+          v-model="title"
+          placeholder="Project/Song Title"
+          hide-details
+          dense
+          tabindex="1"
+        />
+      </v-col>
+      <v-col cols="2" offset="2" class="py-0 my-0">
+        <v-btn
+          class="py-0 my-0"
+          small
+          depressed
+          block
+          color="#5F917A"
+          style="color:white;"
+          @click="transposeDown()"
+          name="transposeDown"
+          :disabled="disableTranspose"
+        >
+          Transpose Down
+        </v-btn>
+      </v-col>
+    </v-row>
     <br />
     <!-- <label for="lyrics" style="text-align:left; margin-left:20%; float:left;">Type your lyrics:</label> -->
-    <br />
-    <textarea
-      id="lyrics"
-      name="lyrics"
-      v-model="lyrics"
-      rows="5"
-      cols="33"
-      placeholder="Enter your lyrics!"
-    ></textarea>
-    <br />
-    <br />
-    <button @click="lyricsDone(); titleEntered()" name="submitLyrics">Submit Lyrics</button>
-  </div>
+    <v-row>
+      <v-col class="py-0 my-0">
+        <v-textarea
+          id="lyrics"
+          name="lyrics"
+          v-model="lyrics"
+          background-color="white"
+          rows="5"
+          cols="33"
+          placeholder="Enter your lyrics!"
+          outlined
+          tabindex="3"
+        ></v-textarea>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="py-0 my-0" cols="2">
+        <v-btn
+          small
+          depressed
+          block
+          color="#5F917A"
+          style="color:white;"
+          @click="
+            lyricsDone();
+            titleEntered();
+          "
+          name="submitLyrics"
+        >
+          Submit Lyrics
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -36,12 +93,14 @@ export default {
     lyrics: "",
     lyricArray: null,
     title: "",
-    transposeN: 0
+    transposeN: 0,
   }),
+  props: {
+    disableTranspose: Boolean,
+  },
   methods: {
     lyricsDone() {
       this.lyricArray = this.lyrics.split("\n");
-      // this.lyrics = "";
       this.$emit("lyricsDone", this.lyricArray);
     },
     titleEntered() {
@@ -54,69 +113,41 @@ export default {
     transposeDown() {
       this.transposeN = this.transposeN - 1;
       this.$emit("transposeChanged", this.transposeN);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-input[type="text"] {
+/* app title block */
+p {
+  float: left;
   text-align: left;
-  background-color: white;
-  border: none;
-  border-bottom: 0.5px solid #a1a1a1;
-  float: left;
-  margin-left: 19.75%;
-  border-radius: 0;
-  width: 15%;
-}
-textarea {
+  font-size: 24px;
   font-family: "Courier New", Courier, monospace;
-  font-size: 16px;
-  width: 60%;
-  border: 1px solid #a1a1a1;
-  border-radius: 2px;
-  padding-top: 3px;
 }
-button[name="transposeUp"] {
-  background-color: #42b983;
-  border: none;
-  text-align: center;
-  color: white;
-  font-size: 14px;
-  width: 150px;
+
+/* title text field */
+.v-text-field {
+  font-family: "Courier New", Courier, monospace;
+  background-color: white;
   border-radius: 2px;
-  float: right;
-  cursor: pointer;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  margin-bottom: 3px;
+  border-color: lightgray;
+  /* box-sizing: border-box; */
 }
-button[name="transposeDown"] {
-  background-color: #42b983;
-  border: none;
-  text-align: center;
-  color: white;
-  font-size: 14px;
-  width: 150px;
-  border-radius: 2px;
-  float: right;
-  cursor: pointer;
-  padding-top: 3px;
-  padding-bottom: 3px;
+.v-text-field:focus {
+  background-color: lightgray;
 }
-button[name="submitLyrics"] {
-  background-color: #42b983;
-  border: none;
-  text-align: center;
-  color: white;
-  font-size: 14px;
-  width: auto;
+
+/* lyric input field */
+.v-textarea {
+  font-family: "Courier New", Courier, monospace;
   border-radius: 2px;
-  float: left;
-  margin-left: 19.9%;
-  cursor: pointer;
-  padding-top: 3px;
-  padding-bottom: 3px;
+}
+
+/* button styling - some values limited to vbtn tag */
+.v-btn {
+  border-radius: 2px;
+  border-color: lightgray;
 }
 </style>

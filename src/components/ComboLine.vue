@@ -1,19 +1,17 @@
 <template>
   <div class="hello">
-    <div v-for="(lyric, idx) in lyrics" :key="idx">
-      <ChordLine
-        :spaces="allSpaces[idx]"
-        :line="idx"
-        :lyric="lyric"
-        :transposeN="transposeN"
-        @chordsEntered="captureChords($event, idx)"
-      />
-      <br />
-      <br />
-      <br />
-      <br />
-      <LyricLine :lyric="lyric" :chordArray="chordArray[idx]" style="padding-top:0px;" />
-    </div>
+    <ChordLine
+      :spaces="spaces"
+      :lyric="lyric"
+      :transposeN="transposeN"
+      @chordsEntered="captureChords($event)"
+      @disableTranspose="disable($event)"
+    />
+    <br />
+    <br />
+    <br />
+    <br />
+    <LyricLine :lyric="lyric" :chords="chords" style="padding-top:0px;" />
   </div>
 </template>
 
@@ -23,31 +21,38 @@ import LyricLine from "@/components/LyricLine.vue";
 export default {
   name: "ComboLine",
   data: () => ({
-    allSpaces: [],
-    chordArray: []
+    spaces: [],
+    chords: [],
   }),
   props: {
-    lyrics: Array,
-    transposeN: Number
+    lyric: String,
+    transposeN: Number,
   },
   methods: {
-    captureChords(chords, index) {
-      this.chordArray.splice(index, 1, chords);
-    }
+    captureChords(chords) {
+      this.chords = chords;
+    },
+    disable(disable) {
+      this.$emit("disableTranspose", disable);
+    },
   },
   watch: {
-    lyrics: function calculateSpaces() {
-      this.lyrics.forEach(lyric => {
-        let words = lyric.split(" ");
-        this.allSpaces.push(words.map(x => x.length));
-      });
-      console.log(this.allSpaces);
-    }
+    lyric: function calculateSpaces() {
+      this.spaces = [];
+      let words = this.lyric.split(" ");
+
+      this.spaces = words.map((x) => x.length);
+    },
+  },
+  mounted() {
+    let words = this.lyric.split(" ");
+
+    this.spaces = words.map((x) => x.length);
   },
   components: {
     ChordLine,
-    LyricLine
-  }
+    LyricLine,
+  },
 };
 </script>
 
