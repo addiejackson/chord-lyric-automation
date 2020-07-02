@@ -22,8 +22,7 @@ export default {
     compareLyricsAndChords(index) {
       let l = this.words;
       let c = this.chords;
-      console.log(l);
-      console.log(c);
+
       if (typeof c[index] === "undefined") {
         c.splice(index, 1, 1);
       }
@@ -32,7 +31,6 @@ export default {
       } else {
         this.spaces.splice(index, 1, 1);
       }
-      console.log(this.spaces);
     }
   },
   props: ["lyric", "chords"],

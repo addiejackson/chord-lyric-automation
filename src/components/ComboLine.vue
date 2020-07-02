@@ -29,7 +29,6 @@ export default {
   },
   methods: {
     captureChords(chords) {
-      console.log(chords);
       this.chords = chords;
     }
   },
@@ -37,16 +36,14 @@ export default {
     lyric: function calculateSpaces() {
       this.spaces = [];
       let words = this.lyric.split(" ");
-      console.log(words);
+
       this.spaces = words.map((x) => x.length);
-      console.log(this.spaces);
     }
   },
   mounted() {
     let words = this.lyric.split(" ");
-    console.log(words);
+
     this.spaces = words.map((x) => x.length);
-    console.log(this.spaces);
   },
   components: {
     ChordLine,
