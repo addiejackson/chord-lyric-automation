@@ -3,6 +3,7 @@
     <div v-for="index in wordCount" :key="index" class="sameLine">
       <ChordBox
         @chordEntered="captureChord($event, index-1)"
+        :transposeN="transposeN"
         :style="'padding-right:' + spaces[index - 1].toString() + 'ch;'"
       />
     </div>
@@ -21,7 +22,8 @@ export default {
   props: {
     lyric: String,
     spaces: Array,
-    line: Number
+    line: Number,
+    transposeN: Number
   },
   methods: {
     countWords() {

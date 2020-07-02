@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <LyricInput @lyricsDone="captureLyrics" @titleEntered="captureTitle"></LyricInput>
+    <LyricInput
+      @lyricsDone="captureLyrics"
+      @titleEntered="captureTitle"
+      @transposeChanged="captureTranspose"
+    ></LyricInput>
     <br />
     <br />
     <div>
@@ -9,7 +13,7 @@
     <br />
     <br />
     <br />
-    <ComboLine :lyrics="lyrics" style="margin-left:20%"></ComboLine>
+    <ComboLine :lyrics="lyrics" :transposeN="transposeN" style="margin-left:20%"></ComboLine>
   </div>
 </template>
 
@@ -22,7 +26,8 @@ export default {
   name: "Home",
   data: () => ({
     lyrics: null,
-    title: ""
+    title: "",
+    transposeN: 0
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -30,6 +35,9 @@ export default {
     },
     captureTitle(value) {
       this.title = value;
+    },
+    captureTranspose(transposeN) {
+      this.transposeN = transposeN;
     }
   },
   components: {
