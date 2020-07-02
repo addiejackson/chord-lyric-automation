@@ -15,14 +15,15 @@ export default {
   }),
   methods: {
     addSpacesToLyric() {
-      console.log(this.chordArray);
       for (let i = 0; i < this.words.length; i++) {
         this.compareLyricsAndChords(i);
       }
     },
     compareLyricsAndChords(index) {
       let l = this.words;
-      let c = this.chordArray;
+      let c = this.chords;
+      console.log(l);
+      console.log(c);
       if (typeof c[index] === "undefined") {
         c.splice(index, 1, 1);
       }
@@ -31,13 +32,21 @@ export default {
       } else {
         this.spaces.splice(index, 1, 1);
       }
+      console.log(this.spaces);
     }
   },
-  props: ["lyric", "chordArray"],
+  props: ["lyric", "chords"],
   watch: {
-    chordArray: {
+    chords: {
       handler: function() {
         this.addSpacesToLyric();
+      }
+    },
+    lyric: {
+      handler: function() {
+        this.words = this.lyric.split(" ");
+        this.spaces = Array(this.lyric.split(" ").length);
+        this.spaces.fill(1);
       }
     }
   },

@@ -8,12 +8,18 @@
     <br />
     <br />
     <div>
-      <h1>{{title}}</h1>
+      <h1>{{ title }}</h1>
     </div>
     <br />
     <br />
     <br />
-    <ComboLine :lyrics="lyrics" :transposeN="transposeN" style="margin-left:20%"></ComboLine>
+    <div v-for="(lyric, idx) in lyrics" :key="idx">
+      <ComboLine
+        :lyric="lyric"
+        :transposeN="transposeN"
+        style="margin-left:20%"
+      ></ComboLine>
+    </div>
   </div>
 </template>
 

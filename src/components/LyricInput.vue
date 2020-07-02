@@ -11,7 +11,9 @@
     />
     <div style="margin-right:20%;">
       <button @click="transposeUp()" name="transposeUp">Transpose Up</button>
-      <button @click="transposeDown()" name="transposeDown">Transpose Down</button>
+      <button @click="transposeDown()" name="transposeDown">
+        Transpose Down
+      </button>
     </div>
     <br />
     <!-- <label for="lyrics" style="text-align:left; margin-left:20%; float:left;">Type your lyrics:</label> -->
@@ -26,7 +28,15 @@
     ></textarea>
     <br />
     <br />
-    <button @click="lyricsDone(); titleEntered()" name="submitLyrics">Submit Lyrics</button>
+    <button
+      @click="
+        lyricsDone();
+        titleEntered();
+      "
+      name="submitLyrics"
+    >
+      Submit Lyrics
+    </button>
   </div>
 </template>
 
@@ -41,7 +51,6 @@ export default {
   methods: {
     lyricsDone() {
       this.lyricArray = this.lyrics.split("\n");
-      // this.lyrics = "";
       this.$emit("lyricsDone", this.lyricArray);
     },
     titleEntered() {

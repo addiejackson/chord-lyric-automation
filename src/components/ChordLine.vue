@@ -2,7 +2,7 @@
   <div>
     <div v-for="index in wordCount" :key="index" class="sameLine">
       <ChordBox
-        @chordEntered="captureChord($event, index-1)"
+        @chordEntered="captureChord($event, index - 1)"
         :transposeN="transposeN"
         :style="'padding-right:' + spaces[index - 1].toString() + 'ch;'"
       />
@@ -40,6 +40,8 @@ export default {
     compareLyricsAndChords(index) {
       let l = this.lyric.split(" ");
       let c = this.chords;
+      console.log(l);
+      console.log(c);
       if (typeof c[index] === "undefined") {
         c.splice(index, 1, "1");
       }

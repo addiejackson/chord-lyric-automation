@@ -27,7 +27,6 @@ export default {
   },
   methods: {
     resizeInput() {
-      console.log(this.chordInput);
       this.chordBoxSize = this.chordInput.length;
       if (this.chordBoxSize <= 1) {
         this.chordBoxSize = 1;
