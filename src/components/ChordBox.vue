@@ -4,8 +4,8 @@
     <input
       type="text"
       :size="chordBoxSize"
-      :style="'width:' + chordBoxSize + 'ch;'"
-      name="chordbox"
+      :style="'width:' + chordBoxSize + 'ch;' + chordBoxAlert"
+      name="chordBox"
       v-model="chordInput"
       @input="resizeInput"
     />
@@ -20,10 +20,11 @@ export default {
     key: "",
     keys: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
     transposedKey: null,
-    chordSuffix: ""
+    chordSuffix: "",
+    chordBoxAlert: "",
   }),
   props: {
-    transposeN: Number
+    transposeN: Number,
   },
   methods: {
     resizeInput() {
@@ -32,6 +33,13 @@ export default {
         this.chordBoxSize = 1;
       }
       this.key = this.isolateKey();
+      if (!this.key && this.chordInput) {
+        this.chordBoxAlert = "background-color:#C77166;";
+        this.$emit("disableTranspose", true);
+      } else {
+        this.chordBoxAlert = "";
+        this.$emit("disableTranspose", false);
+      }
       this.$emit("chordEntered", this.chordInput);
     },
     isolateKey() {
@@ -59,17 +67,17 @@ export default {
         this.chordBoxSize = this.chordInput.length;
         this.$emit("chordEntered", this.chordInput);
       }
-    }
+    },
   },
   watch: {
     transposeN: function() {
       this.transpose(this.transposeN);
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 input[type="text"] {
   font-size: 16px;
   font-weight: 300;
@@ -86,5 +94,9 @@ input[type="text"] {
 input[type="text"]:focus {
   background-color: paleturquoise;
   border: 0;
+}
+
+.invalid_chord {
+  background-color: #c73720;
 }
 </style>

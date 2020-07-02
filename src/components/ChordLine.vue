@@ -3,6 +3,7 @@
     <div v-for="index in wordCount" :key="index" class="sameLine">
       <ChordBox
         @chordEntered="captureChord($event, index - 1)"
+        @disableTranspose="andDisable($event, index - 1)"
         :transposeN="transposeN"
         :style="'padding-right:' + spaces[index - 1].toString() + 'ch;'"
       />
@@ -17,13 +18,15 @@ export default {
 
   data: () => ({
     wordCount: 1,
-    chords: null // will need to capture this from ChordBox
+    chords: null, // will need to capture this from ChordBox,
+    badChords: null,
+    badChordLine: false,
   }),
   props: {
     lyric: String,
     spaces: Array,
     line: Number,
-    transposeN: Number
+    transposeN: Number,
   },
   methods: {
     countWords() {
@@ -48,21 +51,31 @@ export default {
       } else {
         this.spaces.splice(index, 1, 1);
       }
-    }
+    },
+    andDisable(disable, index) {
+      this.badChords.splice(index, 1, disable);
+      this.badChordLine = this.badChords.some((badChord) => badChord == true);
+      this.$emit("disableTranspose", this.badChordLine);
+    },
   },
   mounted() {
     this.countWords();
     this.chords = Array(this.wordCount);
-    this.chords.fill("");
+    this.chords.fill("x");
+    this.badChords = Array(this.wordCount);
+    this.badChords.fill(false);
   },
   components: {
-    ChordBox
+    ChordBox,
   },
   watch: {
     lyric: function() {
       this.countWords();
-    }
-  }
+      for (let i = 0; i < this.wordCount; i++) {
+        this.compareLyricsAndChords(i);
+      }
+    },
+  },
 };
 </script>
 

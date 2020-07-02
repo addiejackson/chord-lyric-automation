@@ -5,6 +5,7 @@
       :lyric="lyric"
       :transposeN="transposeN"
       @chordsEntered="captureChords($event)"
+      @disableTranspose="disable($event)"
     />
     <br />
     <br />
@@ -21,16 +22,19 @@ export default {
   name: "ComboLine",
   data: () => ({
     spaces: [],
-    chords: []
+    chords: [],
   }),
   props: {
     lyric: String,
-    transposeN: Number
+    transposeN: Number,
   },
   methods: {
     captureChords(chords) {
       this.chords = chords;
-    }
+    },
+    disable(disable) {
+      this.$emit("disableTranspose", disable);
+    },
   },
   watch: {
     lyric: function calculateSpaces() {
@@ -38,7 +42,7 @@ export default {
       let words = this.lyric.split(" ");
 
       this.spaces = words.map((x) => x.length);
-    }
+    },
   },
   mounted() {
     let words = this.lyric.split(" ");
@@ -47,8 +51,8 @@ export default {
   },
   components: {
     ChordLine,
-    LyricLine
-  }
+    LyricLine,
+  },
 };
 </script>
 
