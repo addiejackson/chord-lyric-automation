@@ -6,7 +6,9 @@
       @transposeChanged="captureTranspose"
       :disableTranspose="disableTranspose"
     ></LyricInput>
-    <v-container>
+    <v-btn @click="exportPDF">Export</v-btn>
+    <!-- <img :src="output" /> -->
+    <v-container ref="output">
       <v-row align="center" class="py-0 mt-7">
         <v-col>
           <h1>{{ title }}</h1></v-col
@@ -19,15 +21,20 @@
               :lyric="lyric"
               :transposeN="transposeN"
               @disableTranspose="captureDisable"
-            ></ComboLine></div></v-col
-      ></v-row> </v-container
-  ></v-container>
+            />
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
 import ComboLine from "@/components/ComboLine.vue";
 import LyricInput from "@/components/LyricInput.vue";
+import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
 
 export default {
   name: "Home",
@@ -36,6 +43,7 @@ export default {
     title: "",
     transposeN: 0,
     disableTranspose: false,
+    output: null
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -50,14 +58,27 @@ export default {
     captureDisable(disable) {
       this.disableTranspose = disable;
     },
+    async exportPDF() {
+      const el = this.$refs.output;
+      let doc = new jsPDF();
+      // add option type to get the image version
+      // if not provided the promise will return
+      // the canvas.
+      const options = {
+        type: "dataURL"
+      };
+      this.output = await this.$html2canvas(el, options);
+      doc.addImage(this.output, "JPEG", 0, 0);
+      doc.save("sample.pdf");
+    }
   },
   components: {
     ComboLine,
-    LyricInput,
+    LyricInput
   },
   mounted() {
     document.title = "GetChords";
-  },
+  }
 };
 </script>
 
