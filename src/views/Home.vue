@@ -7,21 +7,20 @@
       :disableTranspose="disableTranspose"
     ></LyricInput>
     <v-container>
-      <v-row align="center" class="py-0 mt-7">
+      <v-row align="center" class="py-0 mt-5">
         <v-col>
-          <h1>{{ title }}</h1></v-col
-        >
+          <h1>{{ title }}</h1>
+        </v-col>
       </v-row>
       <v-row align="center" class="mt-0">
         <v-col>
           <div v-for="(lyric, idx) in lyrics" :key="idx">
-            <ComboLine
-              :lyric="lyric"
-              :transposeN="transposeN"
-              @disableTranspose="captureDisable"
-            ></ComboLine></div></v-col
-      ></v-row> </v-container
-  ></v-container>
+            <ComboLine :lyric="lyric" :transposeN="transposeN" @disableTranspose="captureDisable"></ComboLine>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
@@ -35,7 +34,7 @@ export default {
     lyrics: null,
     title: "",
     transposeN: 0,
-    disableTranspose: false,
+    disableTranspose: false
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -49,15 +48,15 @@ export default {
     },
     captureDisable(disable) {
       this.disableTranspose = disable;
-    },
+    }
   },
   components: {
     ComboLine,
-    LyricInput,
+    LyricInput
   },
   mounted() {
     document.title = "GetChords";
-  },
+  }
 };
 </script>
 
