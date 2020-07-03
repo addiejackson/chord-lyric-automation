@@ -33,9 +33,6 @@
           v-model="title"
           placeholder="Project/Song Title"
           hide-details
-          dense
-          solo
-          flat
           tabindex="1"
           style="border-radius:0px;border-bottom:1px solid gray;"
         />
@@ -67,7 +64,6 @@
           rows="5"
           cols="33"
           placeholder="Enter your lyrics!"
-          outlined
           tabindex="3"
         ></v-textarea>
       </v-col>
