@@ -9,7 +9,7 @@ const routes = [{
     name: 'Home',
     component: Home,
     meta: {
-      title: 'GetChords'
+      title: 'Bowstring'
     }
   },
   {

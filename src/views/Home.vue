@@ -5,6 +5,7 @@
       @titleEntered="captureTitle"
       @transposeChanged="captureTranspose"
       :disableTranspose="disableTranspose"
+      :output="output"
     ></Controller>
 
     <!-- <img :src="output" /> -->
@@ -17,11 +18,7 @@
       <v-row align="center" class="mt-0">
         <v-col>
           <div v-for="(lyric, idx) in lyrics" :key="idx">
-            <ComboLine
-              :lyric="lyric"
-              :transposeN="transposeN"
-              @disableTranspose="captureDisable"
-            />
+            <ComboLine :lyric="lyric" :transposeN="transposeN" @disableTranspose="captureDisable" />
           </div>
         </v-col>
       </v-row>
@@ -64,7 +61,7 @@ export default {
     Controller
   },
   mounted() {
-    document.title = "GetChords";
+    document.title = "Bowstring";
   }
 };
 </script>

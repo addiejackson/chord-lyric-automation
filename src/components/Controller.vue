@@ -1,12 +1,53 @@
 <template>
+  <!-- container for top portion, through export button -->
   <v-container class="py-0 mt-6" style="max-width:1050px;">
     <v-row align="center">
-      <v-col class="py-0 my-0" cols="8">
+      <!-- page title -->
+      <v-col class="pt-0 my-0 pb-3 pr-0" cols="3" align="center">
         <p>
-          <b>Get them chords, yo</b>
+          <v-icon style="vertical-align:middle;margin-bottom:6px; color:#5F917A;">mdi-music-note</v-icon>
+          <b>Bowstring</b>
+
+          <!-- help dialog -->
+          <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on , attrs}">
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                small
+                text
+                color="#5F917A"
+                v-on="on"
+                v-bind="attrs"
+                style="margin-bottom:2px;"
+              >
+                <v-icon dark>mdi-information-outline</v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="headline" primary-title>Bowstring Help</v-card-title>
+              <v-divider></v-divider>
+              <v-card-text>
+                <br />
+                <b>To add extra chordbox:</b> add an inline space where needed.
+                <br />
+                <b>To export:</b> click download button to export to PDF.
+                <br />
+                <br />If a chordbox is red, the root note is invalid.
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="dialog=false">close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </p>
       </v-col>
-      <v-col class="py-0 my-0" cols="1" offset="3">
+
+      <!-- transpose up button -->
+      <v-col class="py-0 my-0" cols="1" offset="8">
         <v-btn
           class="py-1 my-0"
           small
@@ -24,6 +65,7 @@
 
     <v-row align="center">
       <v-col cols="8" class="py-0 my-0">
+        <!-- title input box -->
         <v-text-field
           class="py-0 my-0"
           id="titlebox"
@@ -33,9 +75,11 @@
           placeholder="Project/Song Title"
           hide-details
           tabindex="1"
-          style="border-radius:0px;border-bottom:1px solid gray;"
+          style="font-weight:bold;"
         />
       </v-col>
+
+      <!-- transpose down button -->
       <v-col cols="1" offset="3" class="py-0 my-0">
         <v-btn
           class="py-0 my-0"
@@ -51,8 +95,8 @@
         </v-btn>
       </v-col>
     </v-row>
-    <br />
     <v-row>
+      <!-- lyric input box -->
       <v-col class="py-0 my-0">
         <v-textarea
           id="lyrics"
@@ -62,11 +106,13 @@
           rows="5"
           cols="33"
           placeholder="Enter your lyrics!"
-          tabindex="3"
+          tabindex="2"
+          style="border-color:white !important;"
         ></v-textarea>
       </v-col>
     </v-row>
     <v-row>
+      <!-- submit button -->
       <v-col class="py-0 my-0" cols="2">
         <v-btn
           small
@@ -79,14 +125,17 @@
             titleEntered();
           "
           name="submitLyrics"
-          >Submit Lyrics</v-btn
+          tabindex="3"
         >
-          Submit Lyrics
-        </v-btn></v-col
-      ><v-col class="py-0 my-0" cols="2" offset="8">
-        <v-btn @click="exportPDF" small block outlined color="red"
-          >Export</v-btn
-        >
+          <v-icon>mdi-chevron-double-right</v-icon>
+        </v-btn>
+      </v-col>
+
+      <!-- export button -->
+      <v-col class="py-0 my-0" cols="1" offset="9">
+        <v-btn @click="exportPDF" dark small block color="#5F917A">
+          <v-icon>mdi-download</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -99,7 +148,8 @@ export default {
     lyrics: "",
     lyricArray: null,
     title: "",
-    transposeN: 0
+    transposeN: 0,
+    dialog: false
   }),
   props: {
     disableTranspose: Boolean
@@ -127,13 +177,13 @@ export default {
       // if not provided the promise will return
       // the canvas.
       const options = {
-        type: "dataURL",
+        type: "dataURL"
       };
       this.output = await this.$html2canvas(el, options);
       doc.addImage(this.output, "JPEG", 0, 0);
       doc.save("sample.pdf");
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -151,20 +201,11 @@ p {
   font-family: "Courier New", Courier, monospace;
   background-color: white;
   border-radius: 2px;
-  border-color: lightgray;
-}
-.v-text-field:focus {
-  background-color: lightgray;
+  border-color: #dcdcdc;
 }
 
 /* lyric input field */
 .v-textarea {
   font-family: "Courier New", Courier, monospace;
-  border-radius: 2px;
-}
-
-/* button styling - some values limited to vbtn tag */
-.v-btn {
-  border-radius: 2px;
 }
 </style>
