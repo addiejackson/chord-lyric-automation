@@ -1,6 +1,5 @@
 <template>
   <span>
-    <br />
     <input
       type="text"
       :size="chordBoxSize"

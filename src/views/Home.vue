@@ -65,7 +65,7 @@ export default {
         type: "dataURL"
       };
       this.output = await this.$html2canvas(el, options);
-      doc.addImage(this.output, "JPEG", 0, 0);
+      doc.addImage(this.output, "JPEG", 15, 0);
       doc.save(this.title + " Chords and Lyrics.pdf");
     }
   },
