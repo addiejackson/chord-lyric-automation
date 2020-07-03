@@ -1,12 +1,14 @@
 <template>
   <v-container class="py-0 mt-7" style="max-width:1050px;">
-    <LyricInput
+    <Controller
       @lyricsDone="captureLyrics"
       @titleEntered="captureTitle"
       @transposeChanged="captureTranspose"
       :disableTranspose="disableTranspose"
-    ></LyricInput>
-    <v-container>
+    ></Controller>
+
+    <!-- <img :src="output" /> -->
+    <v-container ref="output">
       <v-row align="center" class="py-0 mt-7">
         <v-col>
           <h1>{{ title }}</h1></v-col
@@ -19,15 +21,20 @@
               :lyric="lyric"
               :transposeN="transposeN"
               @disableTranspose="captureDisable"
-            ></ComboLine></div></v-col
-      ></v-row> </v-container
-  ></v-container>
+            />
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
 import ComboLine from "@/components/ComboLine.vue";
-import LyricInput from "@/components/LyricInput.vue";
+import Controller from "@/components/Controller.vue";
+
+// import html2canvas from "html2canvas";
 
 export default {
   name: "Home",
@@ -36,6 +43,7 @@ export default {
     title: "",
     transposeN: 0,
     disableTranspose: false,
+    output: null,
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -53,7 +61,7 @@ export default {
   },
   components: {
     ComboLine,
-    LyricInput,
+    Controller,
   },
   mounted() {
     document.title = "GetChords";

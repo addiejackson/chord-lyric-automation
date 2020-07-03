@@ -5,7 +5,7 @@
         @chordEntered="captureChord($event, index - 1)"
         @disableTranspose="andDisable($event, index - 1)"
         :transposeN="transposeN"
-        :style="'padding-right:' + spaces[index - 1].toString() + 'ch;'"
+        :style="'padding-right:' + spaces[index - 1] + 'ch;'"
       />
     </div>
   </div>
@@ -20,13 +20,13 @@ export default {
     wordCount: 1,
     chords: null, // will need to capture this from ChordBox,
     badChords: null,
-    badChordLine: false,
+    badChordLine: false
   }),
   props: {
     lyric: String,
     spaces: Array,
     line: Number,
-    transposeN: Number,
+    transposeN: Number
   },
   methods: {
     countWords() {
@@ -56,7 +56,7 @@ export default {
       this.badChords.splice(index, 1, disable);
       this.badChordLine = this.badChords.some((badChord) => badChord == true);
       this.$emit("disableTranspose", this.badChordLine);
-    },
+    }
   },
   mounted() {
     this.countWords();
@@ -66,7 +66,7 @@ export default {
     this.badChords.fill(false);
   },
   components: {
-    ChordBox,
+    ChordBox
   },
   watch: {
     lyric: function() {
@@ -74,8 +74,8 @@ export default {
       for (let i = 0; i < this.wordCount; i++) {
         this.compareLyricsAndChords(i);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
