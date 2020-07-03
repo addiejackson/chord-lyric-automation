@@ -23,8 +23,8 @@ export default {
       let l = this.words;
       let c = this.chords;
 
-      if (typeof c[index] === "undefined") {
-        c.splice(index, 1, 1);
+      if (!c[index]) {
+        c.splice(index, 1, "1");
       }
       if (c[index].length > l[index].length) {
         this.spaces.splice(index, 1, c[index].length - l[index].length + 1);

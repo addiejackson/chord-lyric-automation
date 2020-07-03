@@ -43,7 +43,7 @@ export default {
     compareLyricsAndChords(index) {
       let l = this.lyric.split(" ");
       let c = this.chords;
-      if (typeof c[index] === "undefined") {
+      if (!c[index]) {
         c.splice(index, 1, "1");
       }
       if (l[index].length > c[index].length) {
