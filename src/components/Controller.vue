@@ -2,9 +2,11 @@
   <v-container class="py-0 mt-6" style="max-width:1050px;">
     <v-row align="center">
       <v-col class="py-0 my-0" cols="8">
-        <p><b> Get them chords, yo</b></p>
+        <p>
+          <b>Get them chords, yo</b>
+        </p>
       </v-col>
-      <v-col class="py-0 my-0" cols="2" offset="2">
+      <v-col class="py-0 my-0" cols="1" offset="3">
         <v-btn
           class="py-1 my-0"
           small
@@ -14,10 +16,12 @@
           color="#5F917A"
           @click="transposeUp()"
           name="transposeUp"
-          >Transpose Up
+        >
+          <v-icon dark small>mdi-arrow-up</v-icon>
         </v-btn>
       </v-col>
     </v-row>
+
     <v-row align="center">
       <v-col cols="8" class="py-0 my-0">
         <v-text-field
@@ -28,11 +32,11 @@
           v-model="title"
           placeholder="Project/Song Title"
           hide-details
-          dense
           tabindex="1"
+          style="border-radius:0px;border-bottom:1px solid gray;"
         />
       </v-col>
-      <v-col cols="2" offset="2" class="py-0 my-0">
+      <v-col cols="1" offset="3" class="py-0 my-0">
         <v-btn
           class="py-0 my-0"
           small
@@ -43,12 +47,11 @@
           name="transposeDown"
           :disabled="disableTranspose"
         >
-          Transpose Down
+          <v-icon dark small>mdi-arrow-down</v-icon>
         </v-btn>
       </v-col>
     </v-row>
     <br />
-    <!-- <label for="lyrics" style="text-align:left; margin-left:20%; float:left;">Type your lyrics:</label> -->
     <v-row>
       <v-col class="py-0 my-0">
         <v-textarea
@@ -59,7 +62,6 @@
           rows="5"
           cols="33"
           placeholder="Enter your lyrics!"
-          outlined
           tabindex="3"
         ></v-textarea>
       </v-col>
@@ -77,6 +79,7 @@
             titleEntered();
           "
           name="submitLyrics"
+          >Submit Lyrics</v-btn
         >
           Submit Lyrics
         </v-btn></v-col
@@ -96,10 +99,10 @@ export default {
     lyrics: "",
     lyricArray: null,
     title: "",
-    transposeN: 0,
+    transposeN: 0
   }),
   props: {
-    disableTranspose: Boolean,
+    disableTranspose: Boolean
   },
   methods: {
     lyricsDone() {
@@ -139,8 +142,8 @@ export default {
 p {
   float: left;
   text-align: left;
-  font-size: 24px;
-  font-family: "Courier New", Courier, monospace;
+  font-size: 26px;
+  margin-bottom: 0px !important;
 }
 
 /* title text field */
@@ -149,7 +152,6 @@ p {
   background-color: white;
   border-radius: 2px;
   border-color: lightgray;
-  /* box-sizing: border-box; */
 }
 .v-text-field:focus {
   background-color: lightgray;

@@ -11,8 +11,8 @@
     <v-container ref="output">
       <v-row align="center" class="py-0 mt-7">
         <v-col>
-          <h1>{{ title }}</h1></v-col
-        >
+          <h1>{{ title }}</h1>
+        </v-col>
       </v-row>
       <v-row align="center" class="mt-0">
         <v-col>
@@ -43,7 +43,7 @@ export default {
     title: "",
     transposeN: 0,
     disableTranspose: false,
-    output: null,
+    output: null
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -57,15 +57,15 @@ export default {
     },
     captureDisable(disable) {
       this.disableTranspose = disable;
-    },
+    }
   },
   components: {
     ComboLine,
-    Controller,
+    Controller
   },
   mounted() {
     document.title = "GetChords";
-  },
+  }
 };
 </script>
 

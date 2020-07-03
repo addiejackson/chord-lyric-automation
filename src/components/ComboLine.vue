@@ -1,18 +1,22 @@
 <template>
-  <div class="hello">
-    <ChordLine
-      :spaces="spaces"
-      :lyric="lyric"
-      :transposeN="transposeN"
-      @chordsEntered="captureChords($event)"
-      @disableTranspose="disable($event)"
-    />
-    <br />
-    <br />
-    <br />
-    <br />
-    <LyricLine :lyric="lyric" :chords="chords" style="padding-top:0px;" />
-  </div>
+  <v-container class="pa-0 my-0">
+    <v-row>
+      <v-col class="py-0 mt-0">
+        <ChordLine
+          :spaces="spaces"
+          :lyric="lyric"
+          :transposeN="transposeN"
+          @chordsEntered="captureChords($event)"
+          @disableTranspose="disable($event)"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="py-0 my-2">
+        <LyricLine :lyric="lyric" :chords="chords" style="padding-top:0px;" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -22,11 +26,11 @@ export default {
   name: "ComboLine",
   data: () => ({
     spaces: [],
-    chords: [],
+    chords: []
   }),
   props: {
     lyric: String,
-    transposeN: Number,
+    transposeN: Number
   },
   methods: {
     captureChords(chords) {
@@ -34,25 +38,25 @@ export default {
     },
     disable(disable) {
       this.$emit("disableTranspose", disable);
-    },
+    }
   },
   watch: {
     lyric: function calculateSpaces() {
       this.spaces = [];
       let words = this.lyric.split(" ");
 
-      this.spaces = words.map((x) => x.length);
-    },
+      this.spaces = words.map(x => x.length);
+    }
   },
   mounted() {
     let words = this.lyric.split(" ");
 
-    this.spaces = words.map((x) => x.length);
+    this.spaces = words.map(x => x.length);
   },
   components: {
     ChordLine,
-    LyricLine,
-  },
+    LyricLine
+  }
 };
 </script>
 

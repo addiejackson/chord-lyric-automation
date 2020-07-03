@@ -21,10 +21,10 @@ export default {
     keys: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
     transposedKey: null,
     chordSuffix: "",
-    chordBoxAlert: "",
+    chordBoxAlert: ""
   }),
   props: {
-    transposeN: Number,
+    transposeN: Number
   },
   methods: {
     resizeInput() {
@@ -67,13 +67,13 @@ export default {
         this.chordBoxSize = this.chordInput.length;
         this.$emit("chordEntered", this.chordInput);
       }
-    },
+    }
   },
   watch: {
     transposeN: function() {
       this.transpose(this.transposeN);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -92,7 +92,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus {
-  background-color: paleturquoise;
+  background-color: white;
   border: 0;
 }
 
