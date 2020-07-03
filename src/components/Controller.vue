@@ -10,11 +10,10 @@
         <v-btn
           class="py-1 my-0"
           small
-          depressed
+          outlined
           block
           :disabled="disableTranspose"
           color="#5F917A"
-          style="color:white;"
           @click="transposeUp()"
           name="transposeUp"
         >
@@ -41,10 +40,9 @@
         <v-btn
           class="py-0 my-0"
           small
-          depressed
+          outlined
           block
           color="#5F917A"
-          style="color:white;"
           @click="transposeDown()"
           name="transposeDown"
           :disabled="disableTranspose"
@@ -83,12 +81,19 @@
           name="submitLyrics"
           >Submit Lyrics</v-btn
         >
+          Submit Lyrics
+        </v-btn></v-col
+      ><v-col class="py-0 my-0" cols="2" offset="8">
+        <v-btn @click="exportPDF" small block outlined color="red"
+          >Export</v-btn
+        >
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import jsPDF from "jspdf";
 export default {
   data: () => ({
     lyrics: "",
@@ -114,8 +119,21 @@ export default {
     transposeDown() {
       this.transposeN = this.transposeN - 1;
       this.$emit("transposeChanged", this.transposeN);
-    }
-  }
+    },
+    async exportPDF() {
+      const el = this.$refs.output;
+      let doc = new jsPDF();
+      // add option type to get the image version
+      // if not provided the promise will return
+      // the canvas.
+      const options = {
+        type: "dataURL",
+      };
+      this.output = await this.$html2canvas(el, options);
+      doc.addImage(this.output, "JPEG", 0, 0);
+      doc.save("sample.pdf");
+    },
+  },
 };
 </script>
 
@@ -148,6 +166,5 @@ p {
 /* button styling - some values limited to vbtn tag */
 .v-btn {
   border-radius: 2px;
-  border-color: lightgray;
 }
 </style>
