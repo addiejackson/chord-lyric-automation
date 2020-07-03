@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     countWords() {
-      this.wordCount = this.lyric.split(" ").length;
+      this.wordCount = this.dismantleLyric(this.lyric).length;
       if (this.wordCount < 1) {
         this.wordCount = 1;
       }
@@ -40,10 +40,25 @@ export default {
       this.compareLyricsAndChords(index);
       this.$emit("chordsEntered", this.chords);
     },
+    dismantleLyric(l) {
+      let words = l.split(" ");
+      words.forEach((word, idx) => {
+        if (word.includes("-")) {
+          let syllables = word.split("-");
+          syllables.forEach((syllable, jdx) => {
+            if (jdx != syllables.length - 1) {
+              syllables[jdx] += "-";
+            }
+          });
+          words[idx] = syllables;
+        }
+      });
+      return words.flat();
+    },
     compareLyricsAndChords(index) {
-      let l = this.lyric.split(" ");
+      let l = this.dismantleLyric(this.lyric);
       let c = this.chords;
-      if (typeof c[index] === "undefined") {
+      if (!c[index]) {
         c.splice(index, 1, "1");
       }
       if (l[index].length > c[index].length) {

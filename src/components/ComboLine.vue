@@ -38,20 +38,35 @@ export default {
     },
     disable(disable) {
       this.$emit("disableTranspose", disable);
+    },
+    dismantleLyric(l) {
+      let words = l.split(" ");
+      words.forEach((word, idx) => {
+        if (word.includes("-")) {
+          let syllables = word.split("-");
+          syllables.forEach((syllable, jdx) => {
+            if (jdx != syllables.length - 1) {
+              syllables[jdx] += "-";
+            }
+          });
+          words[idx] = syllables;
+        }
+      });
+      return words.flat();
     }
   },
   watch: {
     lyric: function calculateSpaces() {
       this.spaces = [];
-      let words = this.lyric.split(" ");
+      let words = this.dismantleLyric(this.lyric);
 
-      this.spaces = words.map(x => x.length);
+      this.spaces = words.map((x) => x.length);
     }
   },
   mounted() {
-    let words = this.lyric.split(" ");
+    let words = this.dismantleLyric(this.lyric);
 
-    this.spaces = words.map(x => x.length);
+    this.spaces = words.map((x) => x.length);
   },
   components: {
     ChordLine,

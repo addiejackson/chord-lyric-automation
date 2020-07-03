@@ -19,6 +19,7 @@ export default {
     chordInput: "",
     key: "",
     keys: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
+    missedTransposes: 0,
     transposedKey: null,
     chordSuffix: "",
     chordBoxAlert: ""
@@ -57,7 +58,7 @@ export default {
     transpose(transposeN) {
       if (this.key) {
         let keyPos = this.keys.indexOf(this.key);
-        let transposedPos = keyPos + transposeN;
+        let transposedPos = keyPos + transposeN - this.missedTransposes;
         transposedPos = transposedPos % 12;
         if (transposedPos < 0) {
           transposedPos = transposedPos + 12;
@@ -66,6 +67,8 @@ export default {
         this.chordInput = this.transposedKey + this.chordSuffix;
         this.chordBoxSize = this.chordInput.length;
         this.$emit("chordEntered", this.chordInput);
+      } else {
+        this.missedTransposes = transposeN;
       }
     }
   },
