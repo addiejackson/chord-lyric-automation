@@ -5,12 +5,15 @@
       <!-- page title -->
       <v-col class="pt-0 my-0 pb-3 pr-0" cols="3" align="center">
         <p>
-          <v-icon style="vertical-align:middle;margin-bottom:6px; color:#5F917A;">mdi-music-note</v-icon>
+          <v-icon
+            style="vertical-align:middle;margin-bottom:6px; color:#5F917A;"
+            >mdi-music-note</v-icon
+          >
           <b>Bowstring</b>
 
           <!-- help dialog -->
           <v-dialog v-model="dialog" width="500">
-            <template v-slot:activator="{ on , attrs}">
+            <template v-slot:activator="{ on, attrs }">
               <v-btn
                 class="mx-2"
                 fab
@@ -26,7 +29,9 @@
               </v-btn>
             </template>
             <v-card>
-              <v-card-title class="headline" primary-title>Bowstring Help</v-card-title>
+              <v-card-title class="headline" primary-title
+                >Bowstring Help</v-card-title
+              >
               <v-divider></v-divider>
               <v-card-text>
                 <br />
@@ -39,7 +44,7 @@
               <v-divider></v-divider>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text @click="dialog=false">close</v-btn>
+                <v-btn text @click="dialog = false">close</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -111,7 +116,7 @@
         ></v-textarea>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row align="center">
       <!-- submit button -->
       <v-col class="py-0 my-0" cols="2">
         <v-btn
@@ -133,7 +138,15 @@
 
       <!-- export button -->
       <v-col class="py-0 my-0" cols="1" offset="9">
-        <v-btn @click="exportPDF" dark small block color="#5F917A">
+        <v-btn
+          @click="exportPDF"
+          class="py-1 my-0"
+          dark
+          small
+          outlined
+          block
+          color="#5F917A"
+        >
           <v-icon>mdi-download</v-icon>
         </v-btn>
       </v-col>
@@ -142,7 +155,6 @@
 </template>
 
 <script>
-import jsPDF from "jspdf";
 export default {
   data: () => ({
     lyrics: "",
@@ -170,18 +182,8 @@ export default {
       this.transposeN = this.transposeN - 1;
       this.$emit("transposeChanged", this.transposeN);
     },
-    async exportPDF() {
-      const el = this.$refs.output;
-      let doc = new jsPDF();
-      // add option type to get the image version
-      // if not provided the promise will return
-      // the canvas.
-      const options = {
-        type: "dataURL"
-      };
-      this.output = await this.$html2canvas(el, options);
-      doc.addImage(this.output, "JPEG", 0, 0);
-      doc.save("sample.pdf");
+    exportPDF() {
+      this.$emit("export");
     }
   }
 };
