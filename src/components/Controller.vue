@@ -141,11 +141,11 @@
         <v-btn
           @click="exportPDF"
           class="py-1 my-0"
-          dark
           small
           outlined
           block
           color="#5F917A"
+          :disabled="!lyricArray"
         >
           <v-icon>mdi-download</v-icon>
         </v-btn>

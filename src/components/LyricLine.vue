@@ -31,6 +31,21 @@ export default {
       } else {
         this.spaces.splice(index, 1, 1);
       }
+    },
+    dismantleLyric(l) {
+      let words = l.split(" ");
+      words.forEach((word, idx) => {
+        if (word.includes("-")) {
+          let syllables = word.split("-");
+          syllables.forEach((syllable, jdx) => {
+            if (jdx != syllables.length - 1) {
+              syllables[jdx] += "-";
+            }
+          });
+          words[idx] = syllables;
+        }
+      });
+      return words.flat();
     }
   },
   props: ["lyric", "chords"],
@@ -42,15 +57,15 @@ export default {
     },
     lyric: {
       handler: function() {
-        this.words = this.lyric.split(" ");
-        this.spaces = Array(this.lyric.split(" ").length);
+        this.words = this.dismantleLyric(this.lyric);
+        this.spaces = Array(this.words.length);
         this.spaces.fill(1);
       }
     }
   },
   mounted() {
-    this.words = this.lyric.split(" ");
-    this.spaces = Array(this.lyric.split(" ").length);
+    this.words = this.dismantleLyric(this.lyric);
+    this.spaces = Array(this.words.length);
     this.spaces.fill(1);
   }
 };
