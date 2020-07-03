@@ -34,7 +34,10 @@
           placeholder="Project/Song Title"
           hide-details
           dense
+          solo
+          flat
           tabindex="1"
+          style="border-radius:0px;border-bottom:1px solid gray;"
         />
       </v-col>
       <v-col cols="1" offset="3" class="py-0 my-0">
@@ -82,7 +85,8 @@
             titleEntered();
           "
           name="submitLyrics"
-        >Submit Lyrics</v-btn>
+          >Submit Lyrics</v-btn
+        >
       </v-col>
     </v-row>
   </v-container>
