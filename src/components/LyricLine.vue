@@ -7,8 +7,10 @@
 </template>
 
 <script>
+import { DismantleLyric } from "@/mixins/DismantleLyric.js";
 export default {
   name: "LyricLine",
+  mixins: [DismantleLyric],
   data: () => ({
     words: [],
     spaces: null
@@ -31,21 +33,6 @@ export default {
       } else {
         this.spaces.splice(index, 1, 1);
       }
-    },
-    dismantleLyric(l) {
-      let words = l.split(" ");
-      words.forEach((word, idx) => {
-        if (word.includes("-")) {
-          let syllables = word.split("-");
-          syllables.forEach((syllable, jdx) => {
-            if (jdx != syllables.length - 1) {
-              syllables[jdx] += "-";
-            }
-          });
-          words[idx] = syllables;
-        }
-      });
-      return words.flat();
     }
   },
   props: ["lyric", "chords"],

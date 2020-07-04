@@ -23,8 +23,10 @@
 <script>
 import ChordLine from "@/components/ChordLine.vue";
 import LyricLine from "@/components/LyricLine.vue";
+import { DismantleLyric } from "@/mixins/DismantleLyric.js";
 export default {
   name: "ComboLine",
+  mixins: [DismantleLyric],
   data: () => ({
     spaces: [],
     chords: []
@@ -40,21 +42,6 @@ export default {
     },
     disable(disable) {
       this.$emit("disableTranspose", disable);
-    },
-    dismantleLyric(l) {
-      let words = l.split(" ");
-      words.forEach((word, idx) => {
-        if (word.includes("-")) {
-          let syllables = word.split("-");
-          syllables.forEach((syllable, jdx) => {
-            if (jdx != syllables.length - 1) {
-              syllables[jdx] += "-";
-            }
-          });
-          words[idx] = syllables;
-        }
-      });
-      return words.flat();
     }
   },
   watch: {

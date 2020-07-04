@@ -14,9 +14,10 @@
 
 <script>
 import ChordBox from "@/components/ChordBox.vue";
+import { DismantleLyric } from "@/mixins/DismantleLyric.js";
 export default {
   name: "ChordLine",
-
+  mixins: [DismantleLyric],
   data: () => ({
     wordCount: 1,
     chords: null, // will need to capture this from ChordBox,
@@ -41,21 +42,6 @@ export default {
       this.chords.splice(index, 1, val);
       this.compareLyricsAndChords(index);
       this.$emit("chordsEntered", this.chords);
-    },
-    dismantleLyric(l) {
-      let words = l.split(" ");
-      words.forEach((word, idx) => {
-        if (word.includes("-")) {
-          let syllables = word.split("-");
-          syllables.forEach((syllable, jdx) => {
-            if (jdx != syllables.length - 1) {
-              syllables[jdx] += "-";
-            }
-          });
-          words[idx] = syllables;
-        }
-      });
-      return words.flat();
     },
     compareLyricsAndChords(index) {
       let l = this.dismantleLyric(this.lyric);
