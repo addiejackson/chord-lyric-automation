@@ -2,6 +2,7 @@
   <div>
     <div v-for="index in wordCount" :key="index" class="sameLine">
       <ChordBox
+        :exporting="exporting"
         @chordEntered="captureChord($event, index - 1)"
         @disableTranspose="andDisable($event, index - 1)"
         :transposeN="transposeN"
@@ -26,7 +27,8 @@ export default {
     lyric: String,
     spaces: Array,
     line: Number,
-    transposeN: Number
+    transposeN: Number,
+    exporting: Boolean
   },
   methods: {
     countWords() {

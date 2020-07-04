@@ -20,6 +20,7 @@
               :lyric="lyric"
               :transposeN="transposeN"
               @disableTranspose="captureDisable"
+              :exporting="exporting"
             />
           </div>
         </v-col>
@@ -43,7 +44,8 @@ export default {
     title: "",
     transposeN: 0,
     disableTranspose: true,
-    output: null
+    output: null,
+    exporting: false
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -59,14 +61,16 @@ export default {
       this.disableTranspose = disable;
     },
     async exportPDF() {
+      this.exporting = true;
       const el = this.$refs.output;
       let doc = new jsPDF();
       const options = {
         type: "dataURL"
       };
       this.output = await this.$html2canvas(el, options);
-      doc.addImage(this.output, "JPEG", 0, 0);
+      doc.addImage(this.output, "JPEG", 15, 0);
       doc.save(this.title + " Chords and Lyrics.pdf");
+      this.exporting = false;
     }
   },
   components: {
