@@ -7,6 +7,8 @@
       name="chordBox"
       v-model="chordInput"
       @input="resizeInput"
+      class="chordBox"
+      :class="chordBoxDynamicClass"
     />
   </span>
 </template>
@@ -24,7 +26,8 @@ export default {
     chordBoxAlert: ""
   }),
   props: {
-    transposeN: Number
+    transposeN: Number,
+    exporting: Boolean
   },
   methods: {
     resizeInput() {
@@ -75,25 +78,40 @@ export default {
     transposeN: function() {
       this.transpose(this.transposeN);
     }
+  },
+  computed: {
+    chordBoxDynamicClass: function() {
+      if (!this.exporting) {
+        return {
+          nonExporting: true
+        };
+      } else {
+        return {
+          nonExporting: false
+        };
+      }
+    }
   }
 };
 </script>
 
 <style scoped>
-input[type="text"] {
+.chordBox {
   font-size: 16px;
   font-weight: 300;
   font-family: "Courier New", Courier, monospace;
-  border: none;
-  border-bottom: 1px solid gray;
-  border-radius: 1px;
-  background-color: lightgrey;
   padding: 0;
   box-sizing: content-box;
   cursor: pointer;
 }
 
-input[type="text"]:focus {
+.nonExporting {
+  border-bottom: 1px solid gray;
+  border-radius: 1px;
+  background-color: lightgrey;
+}
+
+.chordBoxClass:focus {
   background-color: white;
   border: 0;
 }

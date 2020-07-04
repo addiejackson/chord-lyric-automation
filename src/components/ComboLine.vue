@@ -3,6 +3,7 @@
     <v-row>
       <v-col class="py-0 mt-0">
         <ChordLine
+          :exporting="exporting"
           :spaces="spaces"
           :lyric="lyric"
           :transposeN="transposeN"
@@ -30,7 +31,8 @@ export default {
   }),
   props: {
     lyric: String,
-    transposeN: Number
+    transposeN: Number,
+    exporting: Boolean
   },
   methods: {
     captureChords(chords) {
