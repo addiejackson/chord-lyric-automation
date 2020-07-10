@@ -1,9 +1,11 @@
 <template>
-  <span>
-    <span v-for="(word, index) in words" :key="index">
-      <span :style="'padding-right:' + spaces[index] + 'ch;'">{{ word }}</span>
+  <div>
+    <span class="lyric-container" v-for="(word, index) in words" :key="index">
+      <span class="word" :style="'padding-right:' + spaces[index] + 'ch;'">{{
+        word
+      }}</span>
     </span>
-  </span>
+  </div>
 </template>
 
 <script>

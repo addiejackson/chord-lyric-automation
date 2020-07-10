@@ -149,6 +149,17 @@
         >
           <v-icon>mdi-download</v-icon>
         </v-btn>
+        <v-btn
+          @click="copyText"
+          class="py-1 my-0"
+          small
+          outlined
+          block
+          color="#5F917A"
+          :disabled="!lyricArray"
+        >
+          <v-icon>mdi-clipboard</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -184,6 +195,9 @@ export default {
     },
     exportPDF() {
       this.$emit("export");
+    },
+    copyText() {
+      this.$emit("copyText");
     }
   }
 };

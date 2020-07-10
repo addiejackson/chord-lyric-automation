@@ -15,6 +15,7 @@
 <script>
 import ChordBox from "@/components/ChordBox.vue";
 import { DismantleLyric } from "@/mixins/DismantleLyric.js";
+
 export default {
   name: "ChordLine",
   mixins: [DismantleLyric],
