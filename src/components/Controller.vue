@@ -35,9 +35,10 @@
               <v-divider></v-divider>
               <v-card-text>
                 <br />
-                <b>To add extra chordbox:</b> add an inline space where needed.
+                <b>To add a solo chordbox:</b> Type a "\" followed by the chord
+                (i.e. <code>\Gmaj7</code>).
                 <br />
-                <b>To export:</b> click download button to export to PDF.
+                <b>To export:</b> Click download button to export to PDF.
                 <br />
                 <br />If a chordbox is red, the root note is invalid.
               </v-card-text>
