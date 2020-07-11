@@ -6,6 +6,7 @@
       @transposeChanged="captureTranspose"
       :disableTranspose="disableTranspose"
       @export="exportPDF"
+      @copyText="copyText"
     ></Controller>
     <v-container ref="output">
       <v-row align="center" class="py-0 mt-7">
@@ -34,11 +35,13 @@
 import ComboLine from "@/components/ComboLine.vue";
 import Controller from "@/components/Controller.vue";
 import jsPDF from "jspdf";
+import { CopyChordsAndLyrics } from "@/mixins/CopyChordsAndLyrics.js";
 
 // import html2canvas from "html2canvas";
 
 export default {
   name: "Home",
+  mixins: [CopyChordsAndLyrics],
   data: () => ({
     lyrics: null,
     title: "",
@@ -71,6 +74,13 @@ export default {
       doc.addImage(this.output, "JPEG", 15, 0);
       doc.save(this.title + " Chords and Lyrics.pdf");
       this.exporting = false;
+    },
+    copyText() {
+      let spans = this.$refs.output.querySelectorAll(
+        "span:not(.lyric-container)"
+      );
+      // from CopyChordsAndLyrics mixin
+      this.copyChordsAndLyrics(spans);
     }
   },
   components: {

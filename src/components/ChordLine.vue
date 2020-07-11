@@ -1,12 +1,13 @@
 <template>
   <div>
-    <div v-for="index in wordCount" :key="index" class="sameLine">
+    <div v-for="(word, index) in words" :key="index" class="sameLine">
       <ChordBox
         :exporting="exporting"
-        @chordEntered="captureChord($event, index - 1)"
-        @disableTranspose="andDisable($event, index - 1)"
+        @chordEntered="captureChord($event, index)"
+        @disableTranspose="andDisable($event, index)"
         :transposeN="transposeN"
-        :style="'padding-right:' + spaces[index - 1] + 'ch;'"
+        :style="'padding-right:' + spaces[index] + 'ch;'"
+        :chord="word"
       />
     </div>
   </div>
@@ -15,6 +16,7 @@
 <script>
 import ChordBox from "@/components/ChordBox.vue";
 import { DismantleLyric } from "@/mixins/DismantleLyric.js";
+
 export default {
   name: "ChordLine",
   mixins: [DismantleLyric],
@@ -22,7 +24,8 @@ export default {
     wordCount: 1,
     chords: null, // will need to capture this from ChordBox,
     badChords: null,
-    badChordLine: false
+    badChordLine: false,
+    words: null
   }),
   props: {
     lyric: String,
@@ -33,7 +36,8 @@ export default {
   },
   methods: {
     countWords() {
-      this.wordCount = this.dismantleLyric(this.lyric).length;
+      this.words = this.dismantleLyric(this.lyric);
+      this.wordCount = this.words.length;
       if (this.wordCount < 1) {
         this.wordCount = 1;
       }
@@ -44,16 +48,23 @@ export default {
       this.$emit("chordsEntered", this.chords);
     },
     compareLyricsAndChords(index) {
+      console.log("chord compareLyricsAndChords");
       let l = this.dismantleLyric(this.lyric);
       let c = this.chords;
       if (!c[index]) {
         c.splice(index, 1, "1");
       }
+      if (l[index][0] == "\\") {
+        l[index] = l[index].substring(1);
+      }
+      console.log(c[index]);
+      console.log(l[index]);
       if (l[index].length > c[index].length) {
         this.spaces.splice(index, 1, l[index].length - c[index].length + 1);
       } else {
         this.spaces.splice(index, 1, 1);
       }
+      console.log(this.spaces);
     },
     andDisable(disable, index) {
       this.badChords.splice(index, 1, disable);
@@ -73,6 +84,7 @@ export default {
   },
   watch: {
     lyric: function() {
+      console.log("lyric changed (chordline)");
       this.countWords();
       for (let i = 0; i < this.wordCount; i++) {
         this.compareLyricsAndChords(i);

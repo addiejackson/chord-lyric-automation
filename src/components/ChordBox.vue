@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="chord">
     <input
       type="text"
       :size="chordBoxSize"
@@ -27,7 +27,8 @@ export default {
   }),
   props: {
     transposeN: Number,
-    exporting: Boolean
+    exporting: Boolean,
+    chord: String
   },
   methods: {
     resizeInput() {
@@ -74,9 +75,21 @@ export default {
       }
     }
   },
+  mounted() {
+    if (this.chord && this.chord[0] == "\\") {
+      this.chordInput = this.chord.substring(1);
+      this.resizeInput();
+    }
+  },
   watch: {
     transposeN: function() {
       this.transpose(this.transposeN);
+    },
+    chord: function() {
+      if (this.chord && this.chord[0] == "\\") {
+        this.chordInput = this.chord.substring(1);
+        this.resizeInput();
+      }
     }
   },
   computed: {
