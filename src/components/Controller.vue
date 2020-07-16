@@ -5,10 +5,7 @@
       <!-- page title -->
       <v-col class="pt-0 my-0 pb-3 pr-0" cols="3" align="center">
         <p>
-          <v-icon
-            style="vertical-align:middle;margin-bottom:6px; color:#5F917A;"
-            >mdi-music-note</v-icon
-          >
+          <v-icon style="vertical-align:middle;margin-bottom:6px; color:#5F917A;">mdi-music-note</v-icon>
           <b>Bowstring</b>
 
           <!-- help dialog -->
@@ -29,16 +26,15 @@
               </v-btn>
             </template>
             <v-card>
-              <v-card-title class="headline" primary-title
-                >Bowstring Help</v-card-title
-              >
+              <v-card-title class="headline" primary-title>Bowstring Help</v-card-title>
               <v-divider></v-divider>
               <v-card-text>
                 <br />
-                <b>To add a solo chordbox:</b> Type a "\" followed by the chord
-                (i.e. <code>\Gmaj7</code>).
+                <b>To add a solo chordbox:</b> Type a ">" followed by the chord
+                (i.e.
+                <code>>Gmaj7</code>).
                 <br />
-                <b>To export:</b> Click download button to export to PDF.
+                <b>To export:</b> Click the download button to export to PDF.
                 <br />
                 <br />If a chordbox is red, the root note is invalid.
               </v-card-text>
@@ -64,7 +60,7 @@
           @click="transposeUp()"
           name="transposeUp"
         >
-          <v-icon dark small>mdi-arrow-up</v-icon>
+          <v-icon dark small>mdi-arrow-up-thick</v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -97,7 +93,7 @@
           name="transposeDown"
           :disabled="disableTranspose"
         >
-          <v-icon dark small>mdi-arrow-down</v-icon>
+          <v-icon dark small>mdi-arrow-down-thick</v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -137,8 +133,22 @@
         </v-btn>
       </v-col>
 
-      <!-- export button -->
-      <v-col class="py-0 my-0" cols="1" offset="9">
+      <v-col class="py-0 my-0" cols="1" offset="8">
+        <!-- copy button -->
+        <v-btn
+          @click="copyText"
+          class="py-1 my-0"
+          small
+          outlined
+          block
+          color="#5F917A"
+          :disabled="!lyricArray"
+        >
+          <v-icon>{{this.clipboardIcon}}</v-icon>
+        </v-btn>
+      </v-col>
+      <v-col class="py-0 my-0" cols="1">
+        <!-- export button -->
         <v-btn
           @click="exportPDF"
           class="py-1 my-0"
@@ -149,17 +159,6 @@
           :disabled="!lyricArray"
         >
           <v-icon>mdi-download</v-icon>
-        </v-btn>
-        <v-btn
-          @click="copyText"
-          class="py-1 my-0"
-          small
-          outlined
-          block
-          color="#5F917A"
-          :disabled="!lyricArray"
-        >
-          <v-icon>mdi-clipboard</v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -173,7 +172,8 @@ export default {
     lyricArray: null,
     title: "",
     transposeN: 0,
-    dialog: false
+    dialog: false,
+    clipboardIcon: "mdi-clipboard-outline"
   }),
   props: {
     disableTranspose: Boolean
@@ -182,6 +182,7 @@ export default {
     lyricsDone() {
       this.lyricArray = this.lyrics.split("\n");
       this.$emit("lyricsDone", this.lyricArray);
+      this.clipboardIcon = "mdi-clipboard-outline";
     },
     titleEntered() {
       this.$emit("titleEntered", this.title);
@@ -199,6 +200,7 @@ export default {
     },
     copyText() {
       this.$emit("copyText");
+      this.clipboardIcon = "mdi-clipboard-check";
     }
   }
 };
