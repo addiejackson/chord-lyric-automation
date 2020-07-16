@@ -3,9 +3,9 @@
   <v-container class="py-0 mt-6" style="max-width:1050px;">
     <v-row align="center">
       <!-- page title -->
-      <v-col class="pt-0 my-0 pb-3 pr-0" cols="3" align="center">
+      <v-col class="pt-0 my-0 pb-3 pr-0" cols="9" align="left">
         <p>
-          <v-icon style="vertical-align:middle;margin-bottom:6px; color:#5F917A;">mdi-music-note</v-icon>
+          <v-icon style="vertical-align:middle;margin-bottom:5.5px; color:#5F917A;">mdi-music-note</v-icon>
           <b>Bowstring</b>
 
           <!-- help dialog -->
@@ -47,20 +47,12 @@
           </v-dialog>
         </p>
       </v-col>
-      <!-- Radio button: flats selection -->
-      <v-col cols="1" offset="6">
-        <input
-          type="radio"
-          id="flats"
-          value="flats"
-          style="font-family: 'Courier New', Courier, monospace; font-size:12px;"
-          v-model="picked"
-        />
-        <label for="flats">Flats</label>
-      </v-col>
+
+      <!-- helper text TRANSPOSE -->
+      <v-col class="py-0 my-0" cols="2" align="center" justify="center"></v-col>
 
       <!-- transpose up button -->
-      <v-col class="py-0 my-0" cols="1" offset="1">
+      <v-col class="py-0 my-0" cols="1">
         <v-btn
           class="py-1 my-0"
           small
@@ -77,7 +69,7 @@
     </v-row>
 
     <v-row align="center">
-      <v-col cols="8" class="py-0 my-0">
+      <v-col cols="7" class="py-0 my-0">
         <!-- title input box -->
         <v-text-field
           class="py-0 my-0"
@@ -92,20 +84,34 @@
         />
       </v-col>
 
-      <!-- Radio button: SHARPS selection -->
-      <v-col cols="1" offset="1">
-        <input
-          type="radio"
-          id="sharps"
-          value="sharps"
-          style="font-family: 'Courier New', Courier, monospace; font-size:12px;"
-          v-model="picked"
-        />
-        <label for="sharps">Sharps</label>
+      <!-- spacer cols to prevent title line from being full width -->
+      <v-col cols="2"></v-col>
+
+      <!-- FLATS/SHARP selection -->
+      <v-col class="py-0 my-0" cols="2">
+        <v-btn-toggle
+          v-model="accidental"
+          dense
+          shaped
+          borderless
+          mandatory
+          background-color="none"
+          color="#5F917A"
+          @change="emitAccidental"
+        >
+          <!-- FLAT selection -->
+          <v-btn value="flat" :disabled="disableTranspose">
+            <v-icon>mdi-music-accidental-flat</v-icon>
+          </v-btn>
+          <!-- SHARP selection -->
+          <v-btn value="sharp" :disabled="disableTranspose">
+            <v-icon>mdi-music-accidental-sharp</v-icon>
+          </v-btn>
+        </v-btn-toggle>
       </v-col>
 
       <!-- transpose down button -->
-      <v-col cols="1" offset="1" class="py-0 my-0">
+      <v-col cols="1" class="py-0 my-0">
         <v-btn
           class="py-0 my-0"
           small
@@ -196,7 +202,8 @@ export default {
     title: "",
     transposeN: 0,
     dialog: false,
-    clipboardIcon: "mdi-clipboard-outline"
+    clipboardIcon: "mdi-clipboard-outline",
+    accidental: "flat"
   }),
   props: {
     disableTranspose: Boolean
@@ -224,6 +231,9 @@ export default {
     copyText() {
       this.$emit("copyText");
       this.clipboardIcon = "mdi-clipboard-check";
+    },
+    emitAccidental() {
+      this.$emit("accidentalChanged", this.accidental);
     }
   }
 };

@@ -5,6 +5,7 @@
         :exporting="exporting"
         @chordEntered="captureChord($event, index)"
         @disableTranspose="andDisable($event, index)"
+        :accidental="accidental"
         :transposeN="transposeN"
         :style="'padding-right:' + spaces[index] + 'ch;'"
         :chord="word"
@@ -32,7 +33,8 @@ export default {
     spaces: Array,
     line: Number,
     transposeN: Number,
-    exporting: Boolean
+    exporting: Boolean,
+    accidental: String
   },
   methods: {
     countWords() {

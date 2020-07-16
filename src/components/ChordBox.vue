@@ -28,7 +28,8 @@ export default {
   props: {
     transposeN: Number,
     exporting: Boolean,
-    chord: String
+    chord: String,
+    accidental: String
   },
   methods: {
     resizeInput() {
@@ -89,6 +90,45 @@ export default {
       if (this.chord && this.chord[0] == ">") {
         this.chordInput = this.chord.substring(1);
         this.resizeInput();
+      }
+    },
+    accidental: function() {
+      this.key = this.isolateKey();
+      let keyPos = this.keys.indexOf(this.key);
+      if (this.accidental == "flat") {
+        this.keys = [
+          "C",
+          "Db",
+          "D",
+          "Eb",
+          "E",
+          "F",
+          "Gb",
+          "G",
+          "Ab",
+          "A",
+          "Bb",
+          "B"
+        ];
+      } else if (this.accidental == "sharp") {
+        this.keys = [
+          "C",
+          "C#",
+          "D",
+          "D#",
+          "E",
+          "F",
+          "F#",
+          "G",
+          "G#",
+          "A",
+          "A#",
+          "B"
+        ];
+      }
+      if (this.key) {
+        this.key = this.keys[keyPos];
+        this.chordInput = this.key + this.chordSuffix;
       }
     }
   },
