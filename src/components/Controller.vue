@@ -47,9 +47,20 @@
           </v-dialog>
         </p>
       </v-col>
+      <!-- Radio button: flats selection -->
+      <v-col cols="1" offset="6">
+        <input
+          type="radio"
+          id="flats"
+          value="flats"
+          style="font-family: 'Courier New', Courier, monospace; font-size:12px;"
+          v-model="picked"
+        />
+        <label for="flats">Flats</label>
+      </v-col>
 
       <!-- transpose up button -->
-      <v-col class="py-0 my-0" cols="1" offset="8">
+      <v-col class="py-0 my-0" cols="1" offset="1">
         <v-btn
           class="py-1 my-0"
           small
@@ -81,8 +92,20 @@
         />
       </v-col>
 
+      <!-- Radio button: SHARPS selection -->
+      <v-col cols="1" offset="1">
+        <input
+          type="radio"
+          id="sharps"
+          value="sharps"
+          style="font-family: 'Courier New', Courier, monospace; font-size:12px;"
+          v-model="picked"
+        />
+        <label for="sharps">Sharps</label>
+      </v-col>
+
       <!-- transpose down button -->
-      <v-col cols="1" offset="3" class="py-0 my-0">
+      <v-col cols="1" offset="1" class="py-0 my-0">
         <v-btn
           class="py-0 my-0"
           small
