@@ -1,11 +1,7 @@
 <template>
   <div>
     <span class="lyric-container" v-for="(word, index) in words" :key="index">
-      <span class="word" :style="'padding-right:' + spaces[index] + 'ch;'">
-        {{
-        word
-        }}
-      </span>
+      <span class="word" :style="'padding-right:' + spaces[index] + 'ch;'">{{word}}</span>
     </span>
   </div>
 </template>
@@ -57,7 +53,7 @@ export default {
         this.words = this.dismantleLyric(this.lyric);
         this.words.forEach((word, index) => {
           if (word[0] == ">") {
-            this.words[index] = " ";
+            this.words[index] = "";
           }
         });
         this.spaces = Array(this.words.length);
@@ -70,7 +66,7 @@ export default {
     this.words = this.dismantleLyric(this.lyric);
     this.words.forEach((word, index) => {
       if (word[0] == ">") {
-        this.words[index] = " ";
+        this.words[index] = "";
       }
     });
     this.spaces = Array(this.words.length);
