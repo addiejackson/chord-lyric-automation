@@ -54,7 +54,7 @@ export default {
       if (!c[index]) {
         c.splice(index, 1, "1");
       }
-      if (l[index][0] == "\\") {
+      if (l[index][0] == ">") {
         l[index] = l[index].substring(1);
       }
       console.log(c[index]);
@@ -68,7 +68,7 @@ export default {
     },
     andDisable(disable, index) {
       this.badChords.splice(index, 1, disable);
-      this.badChordLine = this.badChords.some((badChord) => badChord == true);
+      this.badChordLine = this.badChords.some(badChord => badChord == true);
       this.$emit("disableTranspose", this.badChordLine);
     }
   },

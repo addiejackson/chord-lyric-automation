@@ -76,7 +76,7 @@ export default {
     }
   },
   mounted() {
-    if (this.chord && this.chord[0] == "\\") {
+    if (this.chord && this.chord[0] == ">") {
       this.chordInput = this.chord.substring(1);
       this.resizeInput();
     }
@@ -86,7 +86,7 @@ export default {
       this.transpose(this.transposeN);
     },
     chord: function() {
-      if (this.chord && this.chord[0] == "\\") {
+      if (this.chord && this.chord[0] == ">") {
         this.chordInput = this.chord.substring(1);
         this.resizeInput();
       }
