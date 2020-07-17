@@ -97,7 +97,7 @@ export default {
       this.resizeInput();
     },
     accidental: function() {
-      this.key = this.isolateKey();
+      // this.key = this.isolateKey();
       let keyPos = this.keys.indexOf(this.key);
       if (this.accidental == "flat") {
         this.keys = [
