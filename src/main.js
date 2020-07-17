@@ -3,11 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import VueHtml2Canvas from "vue-html2canvas";
-import VueLodash from "vue-lodash";
-import lodash from "lodash";
-
-// name is optional
-Vue.use(VueLodash, { lodash: lodash });
 
 Vue.use(VueHtml2Canvas);
 
