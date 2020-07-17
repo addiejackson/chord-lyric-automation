@@ -1,73 +1,154 @@
 <template>
-  <!-- container for top portion, through export button -->
-  <v-container class="py-0 mt-6" style="max-width:1050px;">
-    <v-row align="center">
+  <!-- TOP SECTION: Bowstring, Help, Title, FLAT/SHARP, TRANSPOSE, LYRIC INPUT -->
+  <v-container class="py-0 mt-6">
+    <v-row align="center" class="pb-1">
       <!-- page title -->
       <v-col class="pt-0 my-0 pb-3 pr-0" cols="9" align="left">
         <p>
-          <v-icon style="vertical-align:middle;margin-bottom:5.5px; color:#5F917A;">mdi-music-note</v-icon>
+          <v-icon style="vertical-align:middle;margin-bottom:5px; color:#5F917A;">mdi-music-note</v-icon>
           <b>Bowstring</b>
-
-          <!-- help dialog -->
-          <v-dialog v-model="dialog" width="500">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                class="mx-2"
-                fab
-                dark
-                small
-                text
-                color="#5F917A"
-                v-on="on"
-                v-bind="attrs"
-                style="margin-bottom:2px;"
-              >
-                <v-icon dark>mdi-information-outline</v-icon>
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="headline" primary-title>Bowstring Help</v-card-title>
-              <v-divider></v-divider>
-              <v-card-text>
-                <br />
-                <b>To add a solo chordbox:</b> Type a ">" followed by the chord
-                (i.e.
-                <code>>Gmaj7</code>).
-                <br />
-                <b>To export:</b> Click the download button to export to PDF.
-                <br />
-                <br />If a chordbox is red, the root note is invalid.
-              </v-card-text>
-              <v-divider></v-divider>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="dialog = false">close</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </p>
+
+        <!-- help dialog -->
+        <v-dialog v-model="dialog" width="500">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              name="helpMenu"
+              class="mx-2"
+              fab
+              dark
+              small
+              text
+              color="#5F917A"
+              v-on="on"
+              v-bind="attrs"
+              style="margin-bottom:2px;"
+            >
+              <v-icon dark>mdi-information-outline</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title class="headline" primary-title>Bowstring Help</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>
+              <br />
+              <b>To add a solo chordbox:</b> Type a ">" followed by the chord
+              (i.e.
+              <code>>Gmaj7</code>).
+              <br />
+              <b>To export:</b> Click the download button to export to PDF.
+              <br />
+              <br />If a chordbox is red, the root note is invalid.
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="dialog = false">close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-col>
 
-      <!-- helper text TRANSPOSE -->
-      <v-col class="py-0 my-0" cols="2" align="center" justify="center"></v-col>
-
-      <!-- transpose up button -->
-      <v-col class="py-0 my-0" cols="1">
-        <v-btn
-          class="py-1 my-0"
-          small
-          outlined
-          block
-          :disabled="disableTranspose"
-          color="#5F917A"
-          @click="transposeUp()"
-          name="transposeUp"
+      <!-- FLATS/SHARP selection -->
+      <v-col class="py-0 my-0" cols="2" align="right" justify="center">
+        <v-btn-toggle
+          v-model="accidental"
+          style="flex-direction: column; padding:0px; margin-top:0px; margin-bottom:0px; border-radius:2px; width:px; min-width:0px;"
+          dense
+          mandatory
+          group
+          background-color="none"
+          @change="emitAccidental"
         >
-          <v-icon dark small>mdi-arrow-up-thick</v-icon>
-        </v-btn>
+          <!-- flat selection -->
+          <v-tooltip left>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn
+                small
+                depressed
+                block
+                text
+                value="flat"
+                color="#5F917A"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-music-accidental-flat</v-icon>
+              </v-btn>
+            </template>
+            <span>flat notation</span>
+          </v-tooltip>
+
+          <!-- sharp selection -->
+          <v-tooltip left>
+            <template v-slot:activator="{on, attrs}">
+              <v-btn
+                small
+                depressed
+                block
+                text
+                value="sharp"
+                color="#5F917A"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-music-accidental-sharp</v-icon>
+              </v-btn>
+            </template>
+            <span>sharp notation</span>
+          </v-tooltip>
+        </v-btn-toggle>
+      </v-col>
+
+      <!-- TRANSPOSE SECTION -->
+      <!-- transpose up button -->
+      <v-col class="py-0 my-0" cols="1" align="right" justify="center">
+        <v-tooltip right>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+              small
+              text
+              fab
+              class="py-0 my-0"
+              :disabled="disableTranspose"
+              color="#5F917A"
+              @click="transposeUp()"
+              name="transposeUp"
+              style="min-width:0px; padding:10px;"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon dark large>mdi-chevron-up</v-icon>
+            </v-btn>
+          </template>
+          <span>transpose up</span>
+        </v-tooltip>
+
+        <!-- transpose down button -->
+        <v-tooltip right>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+              class="py-0 my-0"
+              small
+              text
+              fab
+              color="#5F917A"
+              @click="transposeDown()"
+              name="transposeDown"
+              :disabled="disableTranspose"
+              style="min-width:0px; padding:10px;"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon dark large>mdi-chevron-down</v-icon>
+            </v-btn>
+          </template>
+          <span>transpose down</span>
+        </v-tooltip>
       </v-col>
     </v-row>
 
+    <!-- TITLE + LYRIC INPUT BOXES -->
     <v-row align="center">
       <v-col cols="7" class="py-0 my-0">
         <!-- title input box -->
@@ -77,118 +158,100 @@
           type="text"
           name="titlebox"
           v-model="title"
-          placeholder="Project/Song Title"
+          label="Project/Song Title"
           hide-details
           tabindex="1"
           style="font-weight:bold;"
         />
       </v-col>
 
-      <!-- spacer cols to prevent title line from being full width -->
       <v-col cols="2"></v-col>
-
-      <!-- FLATS/SHARP selection -->
-      <v-col class="py-0 my-0" cols="2">
-        <v-btn-toggle
-          v-model="accidental"
-          dense
-          shaped
-          borderless
-          mandatory
-          background-color="none"
-          color="#5F917A"
-          @change="emitAccidental"
-        >
-          <!-- FLAT selection -->
-          <v-btn value="flat" :disabled="disableTranspose">
-            <v-icon>mdi-music-accidental-flat</v-icon>
-          </v-btn>
-          <!-- SHARP selection -->
-          <v-btn value="sharp" :disabled="disableTranspose">
-            <v-icon>mdi-music-accidental-sharp</v-icon>
-          </v-btn>
-        </v-btn-toggle>
-      </v-col>
-
-      <!-- transpose down button -->
-      <v-col cols="1" class="py-0 my-0">
-        <v-btn
-          class="py-0 my-0"
-          small
-          outlined
-          block
-          color="#5F917A"
-          @click="transposeDown()"
-          name="transposeDown"
-          :disabled="disableTranspose"
-        >
-          <v-icon dark small>mdi-arrow-down-thick</v-icon>
-        </v-btn>
-      </v-col>
     </v-row>
     <v-row>
       <!-- lyric input box -->
-      <v-col class="py-0 my-0">
+      <v-col class="py-0 my-0" cols="12">
         <v-textarea
           id="lyrics"
           name="lyrics"
           v-model="lyrics"
           background-color="white"
           rows="5"
-          cols="33"
+          full-width
           placeholder="Enter your lyrics!"
           tabindex="2"
-          style="border-color:white !important;"
         ></v-textarea>
       </v-col>
     </v-row>
     <v-row align="center">
-      <!-- submit button -->
+      <!-- SUBMIT BUTTON -->
       <v-col class="py-0 my-0" cols="2">
-        <v-btn
-          small
-          depressed
-          block
-          color="#5F917A"
-          style="color:white;"
-          @click="
+        <v-tooltip bottom>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+              small
+              depressed
+              block
+              color="#5F917A"
+              style="color:white;"
+              @click="
             lyricsDone();
             titleEntered();
           "
-          name="submitLyrics"
-          tabindex="3"
-        >
-          <v-icon>mdi-chevron-double-right</v-icon>
-        </v-btn>
+              name="submitLyrics"
+              tabindex="3"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-chevron-double-right</v-icon>
+            </v-btn>
+          </template>
+          <span>submit lyrics</span>
+        </v-tooltip>
       </v-col>
 
+      <!-- COPY + EXPORT BUTTONS -->
       <v-col class="py-0 my-0" cols="1" offset="8">
         <!-- copy button -->
-        <v-btn
-          @click="copyText"
-          class="py-1 my-0"
-          small
-          outlined
-          block
-          color="#5F917A"
-          :disabled="!lyricArray"
-        >
-          <v-icon>{{this.clipboardIcon}}</v-icon>
-        </v-btn>
+        <v-tooltip left>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+              @click="copyText"
+              class="py-1 my-0"
+              small
+              text
+              block
+              color="#5F917A"
+              :disabled="!lyricArray"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>{{ `mdi-${clipboardIcon}` }}</v-icon>
+            </v-btn>
+          </template>
+          <span>copy lyrics + chords</span>
+        </v-tooltip>
       </v-col>
+
       <v-col class="py-0 my-0" cols="1">
         <!-- export button -->
-        <v-btn
-          @click="exportPDF"
-          class="py-1 my-0"
-          small
-          outlined
-          block
-          color="#5F917A"
-          :disabled="!lyricArray"
-        >
-          <v-icon>mdi-download</v-icon>
-        </v-btn>
+        <v-tooltip right>
+          <template v-slot:activator="{on, attrs}">
+            <v-btn
+              @click="exportPDF"
+              class="py-1 my-0"
+              small
+              text
+              block
+              color="#5F917A"
+              :disabled="!lyricArray"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon>mdi-download</v-icon>
+            </v-btn>
+          </template>
+          <span>download as PDF</span>
+        </v-tooltip>
       </v-col>
     </v-row>
   </v-container>
@@ -202,7 +265,7 @@ export default {
     title: "",
     transposeN: 0,
     dialog: false,
-    clipboardIcon: "mdi-clipboard-outline",
+    clipboardIcon: "clipboard-outline",
     accidental: "flat"
   }),
   props: {
@@ -212,28 +275,32 @@ export default {
     lyricsDone() {
       this.lyricArray = this.lyrics.split("\n");
       this.$emit("lyricsDone", this.lyricArray);
-      this.clipboardIcon = "mdi-clipboard-outline";
+      this.clipboardIcon = "clipboard-outline";
     },
     titleEntered() {
       this.$emit("titleEntered", this.title);
+      this.clipboardIcon = "clipboard-outline";
     },
     transposeUp() {
       this.transposeN = this.transposeN + 1;
       this.$emit("transposeChanged", this.transposeN);
+      this.clipboardIcon = "clipboard-outline";
     },
     transposeDown() {
       this.transposeN = this.transposeN - 1;
       this.$emit("transposeChanged", this.transposeN);
+      this.clipboardIcon = "clipboard-outline";
     },
     exportPDF() {
       this.$emit("export");
     },
     copyText() {
       this.$emit("copyText");
-      this.clipboardIcon = "mdi-clipboard-check";
+      this.clipboardIcon = "clipboard-check";
     },
     emitAccidental() {
       this.$emit("accidentalChanged", this.accidental);
+      this.clipboardIcon = "clipboard-outline";
     }
   }
 };
@@ -254,10 +321,12 @@ p {
   background-color: white;
   border-radius: 2px;
   border-color: #dcdcdc;
+  font-size: 14px;
 }
 
 /* lyric input field */
 .v-textarea {
   font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
 }
 </style>

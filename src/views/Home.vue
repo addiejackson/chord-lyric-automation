@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-0 mt-7" style="max-width:1050px;">
+  <v-container class="py-0 mt-7" style="max-width:60%;">
     <Controller
       @lyricsDone="captureLyrics"
       @titleEntered="captureTitle"
@@ -51,7 +51,7 @@ export default {
     disableTranspose: true,
     output: null,
     exporting: false,
-    accidental: ""
+    accidental: "flat"
   }),
   methods: {
     captureLyrics(lyrics) {

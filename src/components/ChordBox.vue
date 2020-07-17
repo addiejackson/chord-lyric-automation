@@ -39,7 +39,7 @@ export default {
       }
       this.key = this.isolateKey();
       if (!this.key && this.chordInput) {
-        this.chordBoxAlert = "background-color:#C77166;";
+        this.chordBoxAlert = "background-color:#DB848D;";
         this.$emit("disableTranspose", true);
       } else {
         this.chordBoxAlert = "";
@@ -49,6 +49,12 @@ export default {
     },
     isolateKey() {
       let root = this.chordInput.substring(0, 2);
+      if (
+        (root[1] == "b" && this.accidental == "sharp") ||
+        (root[1] == "#" && this.accidental == "flat")
+      ) {
+        return null;
+      }
       if (this.keys.includes(root)) {
         this.chordSuffix = this.chordInput.substring(2);
         return root;
@@ -167,9 +173,5 @@ export default {
 .chordBoxClass:focus {
   background-color: white;
   border: 0;
-}
-
-.invalid_chord {
-  background-color: #c73720;
 }
 </style>
