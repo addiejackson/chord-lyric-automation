@@ -24,7 +24,12 @@ export const CopyChordsAndLyrics = {
       spans.forEach((span) => {
         if (span.className != currentClass) {
           currentClass = span.className;
-          text += "\n";
+          // filter out onlyChords class to not
+          // get an extra line by
+          // lyric > onlyChords > chord
+          if (span.className != "onlyChords") {
+            text += "\n";
+          }
         }
         text += this.getValue(span);
         text += this.getSpaces(span);

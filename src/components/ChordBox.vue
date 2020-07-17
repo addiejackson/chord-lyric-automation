@@ -83,8 +83,8 @@ export default {
     }
   },
   mounted() {
-    if (this.chord && this.chord[0] == ">") {
-      this.chordInput = this.chord.substring(1);
+    if (this.chord) {
+      this.chordInput = this.chord;
       this.resizeInput();
     }
   },
@@ -93,10 +93,8 @@ export default {
       this.transpose(this.transposeN);
     },
     chord: function() {
-      if (this.chord && this.chord[0] == ">") {
-        this.chordInput = this.chord.substring(1);
-        this.resizeInput();
-      }
+      this.chordInput = this.chord;
+      this.resizeInput();
     },
     accidental: function() {
       this.key = this.isolateKey();
