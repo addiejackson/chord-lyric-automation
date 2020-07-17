@@ -1,13 +1,17 @@
 <template>
   <div>
-    <div v-for="(word, index) in words" :key="index" class="sameLine">
+    <div
+      v-for="(arrowChord, index) in arrowChords"
+      :key="index"
+      class="sameLine"
+    >
       <ChordBox
         :exporting="exporting"
         @chordEntered="captureChord($event, index)"
         @disableTranspose="andDisable($event, index)"
         :transposeN="transposeN"
-        :style="'padding-right:' + spaces[index] + 'ch;'"
-        :chord="word"
+        :style="'padding-right:' + chordSpaces[index] + 'ch;'"
+        :chord="arrowChord"
       />
     </div>
   </div>
@@ -28,68 +32,30 @@ export default {
     words: null
   }),
   props: {
-    lyric: String,
-    spaces: Array,
+    arrowChords: Array,
+    chordSpaces: Array,
     line: Number,
     transposeN: Number,
     exporting: Boolean
   },
   methods: {
-    countWords() {
-      this.words = this.dismantleLyric(this.lyric);
-      this.wordCount = this.words.length;
-      if (this.wordCount < 1) {
-        this.wordCount = 1;
-      }
-    },
     captureChord(val, index) {
       this.chords.splice(index, 1, val);
-      this.compareLyricsAndChords(index);
-      this.$emit("chordsEntered", this.chords);
-    },
-    compareLyricsAndChords(index) {
-      console.log("chord compareLyricsAndChords");
-      let l = this.dismantleLyric(this.lyric);
-      let c = this.chords;
-      if (!c[index]) {
-        c.splice(index, 1, "1");
-      }
-      if (l[index][0] == ">") {
-        l[index] = l[index].substring(1);
-      }
-      console.log(c[index]);
-      console.log(l[index]);
-      if (l[index].length > c[index].length) {
-        this.spaces.splice(index, 1, l[index].length - c[index].length + 1);
-      } else {
-        this.spaces.splice(index, 1, 1);
-      }
-      console.log(this.spaces);
+      this.$emit("chordsEntered", { chord: val, index: index });
     },
     andDisable(disable, index) {
       this.badChords.splice(index, 1, disable);
-      this.badChordLine = this.badChords.some(badChord => badChord == true);
+      this.badChordLine = this.badChords.some((badChord) => badChord == true);
       this.$emit("disableTranspose", this.badChordLine);
     }
   },
   mounted() {
-    this.countWords();
-    this.chords = Array(this.wordCount);
-    this.chords.fill("x");
+    this.chords = this.arrowChords;
     this.badChords = Array(this.wordCount);
     this.badChords.fill(false);
   },
   components: {
     ChordBox
-  },
-  watch: {
-    lyric: function() {
-      console.log("lyric changed (chordline)");
-      this.countWords();
-      for (let i = 0; i < this.wordCount; i++) {
-        this.compareLyricsAndChords(i);
-      }
-    }
   }
 };
 </script>
