@@ -6,6 +6,7 @@
           :exporting="exporting"
           :spaces="spaces"
           :lyric="lyric"
+          :accidental="accidental"
           :transposeN="transposeN"
           @chordsEntered="captureChords($event)"
           @disableTranspose="disable($event)"
@@ -34,7 +35,8 @@ export default {
   props: {
     lyric: String,
     transposeN: Number,
-    exporting: Boolean
+    exporting: Boolean,
+    accidental: String
   },
   methods: {
     captureChords(chords) {
@@ -49,13 +51,13 @@ export default {
       this.spaces = [];
       let words = this.dismantleLyric(this.lyric);
 
-      this.spaces = words.map((x) => x.length);
+      this.spaces = words.map(x => x.length);
     }
   },
   mounted() {
     let words = this.dismantleLyric(this.lyric);
 
-    this.spaces = words.map((x) => x.length);
+    this.spaces = words.map(x => x.length);
   },
   components: {
     ChordLine,

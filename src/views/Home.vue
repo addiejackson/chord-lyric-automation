@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-0 mt-7" style="max-width:1050px;">
+  <v-container class="py-0 mt-7" style="max-width:60%;">
     <Controller
       @lyricsDone="captureLyrics"
       @titleEntered="captureTitle"
@@ -7,6 +7,7 @@
       :disableTranspose="disableTranspose"
       @export="exportPDF"
       @copyText="copyText"
+      @accidentalChanged="captureAccidental"
     ></Controller>
     <v-container ref="output">
       <v-row align="center" class="py-0 mt-7">
@@ -22,6 +23,7 @@
               :transposeN="transposeN"
               @disableTranspose="captureDisable"
               :exporting="exporting"
+              :accidental="accidental"
             />
           </div>
         </v-col>
@@ -48,7 +50,8 @@ export default {
     transposeN: 0,
     disableTranspose: true,
     output: null,
-    exporting: false
+    exporting: false,
+    accidental: "flat"
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -62,6 +65,9 @@ export default {
     },
     captureDisable(disable) {
       this.disableTranspose = disable;
+    },
+    captureAccidental(accidental) {
+      this.accidental = accidental;
     },
     async exportPDF() {
       this.exporting = true;

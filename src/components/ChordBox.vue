@@ -28,7 +28,8 @@ export default {
   props: {
     transposeN: Number,
     exporting: Boolean,
-    chord: String
+    chord: String,
+    accidental: String
   },
   methods: {
     resizeInput() {
@@ -38,7 +39,7 @@ export default {
       }
       this.key = this.isolateKey();
       if (!this.key && this.chordInput) {
-        this.chordBoxAlert = "background-color:#C77166;";
+        this.chordBoxAlert = "background-color:#DB848D;";
         this.$emit("disableTranspose", true);
       } else {
         this.chordBoxAlert = "";
@@ -48,6 +49,12 @@ export default {
     },
     isolateKey() {
       let root = this.chordInput.substring(0, 2);
+      if (
+        (root[1] == "b" && this.accidental == "sharp") ||
+        (root[1] == "#" && this.accidental == "flat")
+      ) {
+        return null;
+      }
       if (this.keys.includes(root)) {
         this.chordSuffix = this.chordInput.substring(2);
         return root;
@@ -90,6 +97,45 @@ export default {
         this.chordInput = this.chord.substring(1);
         this.resizeInput();
       }
+    },
+    accidental: function() {
+      this.key = this.isolateKey();
+      let keyPos = this.keys.indexOf(this.key);
+      if (this.accidental == "flat") {
+        this.keys = [
+          "C",
+          "Db",
+          "D",
+          "Eb",
+          "E",
+          "F",
+          "Gb",
+          "G",
+          "Ab",
+          "A",
+          "Bb",
+          "B"
+        ];
+      } else if (this.accidental == "sharp") {
+        this.keys = [
+          "C",
+          "C#",
+          "D",
+          "D#",
+          "E",
+          "F",
+          "F#",
+          "G",
+          "G#",
+          "A",
+          "A#",
+          "B"
+        ];
+      }
+      if (this.key) {
+        this.key = this.keys[keyPos];
+        this.chordInput = this.key + this.chordSuffix;
+      }
     }
   },
   computed: {
@@ -127,9 +173,5 @@ export default {
 .chordBoxClass:focus {
   background-color: white;
   border: 0;
-}
-
-.invalid_chord {
-  background-color: #c73720;
 }
 </style>
