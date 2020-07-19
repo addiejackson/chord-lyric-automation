@@ -8,27 +8,38 @@
       v-model="chordInput"
       @input="resizeInput"
       class="chordBox"
-      :class="chordBoxDynamicClass"
     />
   </span>
 </template>
 
 <script>
+import { EventBus } from "./EventBus.js";
 export default {
   data: () => ({
     chordBoxSize: 1,
     chordInput: "",
-    key: "",
+    originalKey: "",
     keys: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
     missedTransposes: 0,
     transposedKey: null,
     chordSuffix: "",
-    chordBoxAlert: ""
+    chordBoxAlert: "",
+    transposeN: 0,
+    accidental: "flat"
   }),
   props: {
-    transposeN: Number,
-    exporting: Boolean,
     chord: String
+  },
+  created() {
+    EventBus.$on("accidentalChanged", (accidental) => {
+      this.accidental = accidental;
+    });
+    EventBus.$on("transposeChanged", (tN) => {
+      this.transposeN = tN;
+    });
+    EventBus.$on("resetTranspose", () => {
+      this.transposeN = 0;
+    });
   },
   methods: {
     resizeInput() {
@@ -36,9 +47,9 @@ export default {
       if (this.chordBoxSize <= 1) {
         this.chordBoxSize = 1;
       }
-      this.key = this.isolateKey();
-      if (!this.key && this.chordInput) {
-        this.chordBoxAlert = "background-color:#C77166;";
+      if (!this.isolateKey() && this.chordInput) {
+        this.chordBoxAlert = "background-color:#DB848D;";
+        this.originalKey = null;
         this.$emit("disableTranspose", true);
       } else {
         this.chordBoxAlert = "";
@@ -59,8 +70,12 @@ export default {
       return null;
     },
     transpose(transposeN) {
-      if (this.key) {
-        let keyPos = this.keys.indexOf(this.key);
+      if (!this.originalKey) {
+        // this.transposedKey = this.originalKey;
+        this.missedTransposes = transposeN;
+      }
+      if (this.originalKey) {
+        let keyPos = this.keys.indexOf(this.originalKey);
         let transposedPos = keyPos + transposeN - this.missedTransposes;
         transposedPos = transposedPos % 12;
         if (transposedPos < 0) {
@@ -70,38 +85,67 @@ export default {
         this.chordInput = this.transposedKey + this.chordSuffix;
         this.chordBoxSize = this.chordInput.length;
         this.$emit("chordEntered", this.chordInput);
-      } else {
-        this.missedTransposes = transposeN;
       }
     }
   },
   mounted() {
-    if (this.chord && this.chord[0] == ">") {
-      this.chordInput = this.chord.substring(1);
-      this.resizeInput();
-    }
+    console.log("mounted");
+    this.chordInput = this.chord;
+    this.originalKey = this.isolateKey();
+    console.log(this.originalKey);
+    this.resizeInput();
   },
   watch: {
     transposeN: function() {
       this.transpose(this.transposeN);
     },
     chord: function() {
-      if (this.chord && this.chord[0] == ">") {
-        this.chordInput = this.chord.substring(1);
-        this.resizeInput();
+      if (!this.originalKey) {
+        this.originalKey = this.isolateKey();
       }
-    }
-  },
-  computed: {
-    chordBoxDynamicClass: function() {
-      if (!this.exporting) {
-        return {
-          nonExporting: true
-        };
+      this.chordInput = this.chord;
+      this.resizeInput();
+    },
+    accidental: function() {
+      let key = this.isolateKey();
+      let keyPos = this.keys.indexOf(key);
+      let originalKeyPos = this.keys.indexOf(this.originalKey);
+      if (this.accidental == "sharp") {
+        this.keys = [
+          "C",
+          "C#",
+          "D",
+          "D#",
+          "E",
+          "F",
+          "F#",
+          "G",
+          "G#",
+          "A",
+          "A#",
+          "B"
+        ];
       } else {
-        return {
-          nonExporting: false
-        };
+        this.keys = [
+          "C",
+          "Db",
+          "D",
+          "Eb",
+          "E",
+          "F",
+          "Gb",
+          "G",
+          "Ab",
+          "A",
+          "Bb",
+          "B"
+        ];
+      }
+      if (key) {
+        key = this.keys[keyPos];
+        this.chordInput = key + this.chordSuffix;
+        this.transposedKey = key;
+        this.originalKey = this.keys[originalKeyPos];
       }
     }
   }
@@ -116,9 +160,6 @@ export default {
   padding: 0;
   box-sizing: content-box;
   cursor: pointer;
-}
-
-.nonExporting {
   border-bottom: 1px solid gray;
   border-radius: 1px;
   background-color: lightgrey;
@@ -127,9 +168,5 @@ export default {
 .chordBoxClass:focus {
   background-color: white;
   border: 0;
-}
-
-.invalid_chord {
-  background-color: #c73720;
 }
 </style>
