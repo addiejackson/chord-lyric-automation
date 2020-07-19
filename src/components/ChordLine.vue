@@ -28,12 +28,12 @@ export default {
     chords: null, // will need to capture this from ChordBox,
     badChords: null,
     badChordLine: false,
-    words: null,
+    words: null
   }),
   props: {
     arrowChords: Array,
     chordSpaces: Array,
-    line: Number,
+    line: Number
   },
   methods: {
     captureChord(val, index) {
@@ -45,7 +45,7 @@ export default {
       this.badChords.splice(index, 1, disable);
       this.badChordLine = this.badChords.some((badChord) => badChord == true);
       EventBus.$emit("disableTranspose", this.badChordLine);
-    },
+    }
   },
   mounted() {
     this.chords = this.arrowChords;
@@ -53,8 +53,8 @@ export default {
     this.badChords.fill(false);
   },
   components: {
-    ChordBox,
-  },
+    ChordBox
+  }
 };
 </script>
 

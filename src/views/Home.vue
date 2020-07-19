@@ -4,7 +4,6 @@
       @lyricsDone="captureLyrics"
       @titleEntered="captureTitle"
       @copyText="copyText"
-      @export="exportPDF"
     ></Controller>
     <v-container ref="output">
       <v-row align="center" class="py-0 mt-7">
@@ -27,10 +26,7 @@
 // @ is an alias to /src
 import ComboLine from "@/components/ComboLine.vue";
 import Controller from "@/components/Controller.vue";
-import jsPDF from "jspdf";
 import { CopyChordsAndLyrics } from "@/mixins/CopyChordsAndLyrics.js";
-import { EventBus } from "../components/EventBus.js";
-
 // import html2canvas from "html2canvas";
 
 export default {
@@ -39,7 +35,7 @@ export default {
   data: () => ({
     lyrics: null,
     title: "",
-    output: null,
+    output: null
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -48,34 +44,21 @@ export default {
     captureTitle(value) {
       this.title = value;
     },
-    async exportPDF() {
-      this.exporting = true;
-      const el = this.$refs.output;
-      let doc = new jsPDF();
-      const options = {
-        type: "dataURL",
-      };
-      this.output = await this.$html2canvas(el, options);
-      doc.addImage(this.output, "JPEG", 15, 0);
-      doc.save(this.title + " Chords and Lyrics.pdf");
-      this.exporting = false;
-      EventBus.$emit("exporting", this.exporting);
-    },
     copyText() {
       let spans = this.$refs.output.querySelectorAll(
         "span:not(.lyric-container)"
       );
       // from CopyChordsAndLyrics mixin
       this.copyChordsAndLyrics(spans);
-    },
+    }
   },
   components: {
     ComboLine,
-    Controller,
+    Controller
   },
   mounted() {
     document.title = "Bowstring";
-  },
+  }
 };
 </script>
 

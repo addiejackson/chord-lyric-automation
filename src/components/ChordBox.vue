@@ -8,7 +8,6 @@
       v-model="chordInput"
       @input="resizeInput"
       class="chordBox"
-      :class="chordBoxDynamicClass"
     />
   </span>
 </template>
@@ -25,22 +24,21 @@ export default {
     transposedKey: null,
     chordSuffix: "",
     chordBoxAlert: "",
-    exporting: false,
     transposeN: 0,
-    accidental: "flat",
+    accidental: "flat"
   }),
   props: {
-    chord: String,
+    chord: String
   },
   created() {
     EventBus.$on("accidentalChanged", (accidental) => {
       this.accidental = accidental;
     });
-    EventBus.$on("exporting", (exporting) => {
-      this.exporting = exporting;
-    });
     EventBus.$on("transposeChanged", (tN) => {
       this.transposeN = tN;
+    });
+    EventBus.$on("resetTranspose", () => {
+      this.transposeN = 0;
     });
   },
   methods: {
@@ -88,7 +86,7 @@ export default {
         this.chordBoxSize = this.chordInput.length;
         this.$emit("chordEntered", this.chordInput);
       }
-    },
+    }
   },
   mounted() {
     console.log("mounted");
@@ -124,13 +122,8 @@ export default {
           "G",
           "G#",
           "A",
-<<<<<<< HEAD
-          "Bb",
-          "B",
-=======
           "A#",
           "B"
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
         ];
       } else {
         this.keys = [
@@ -144,13 +137,8 @@ export default {
           "G",
           "Ab",
           "A",
-<<<<<<< HEAD
-          "A#",
-          "B",
-=======
           "Bb",
           "B"
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
         ];
       }
       if (key) {
@@ -159,21 +147,8 @@ export default {
         this.transposedKey = key;
         this.originalKey = this.keys[originalKeyPos];
       }
-    },
-  },
-  computed: {
-    chordBoxDynamicClass: function() {
-      if (!this.exporting) {
-        return {
-          nonExporting: true,
-        };
-      } else {
-        return {
-          nonExporting: false,
-        };
-      }
-    },
-  },
+    }
+  }
 };
 </script>
 

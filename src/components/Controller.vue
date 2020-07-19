@@ -40,7 +40,7 @@
               <b>To add a solo chordbox:</b> Type a ">" followed by the chord
               (i.e. <code>>Gmaj7</code>).
               <br />
-              <b>To export:</b> Click the download button to export to PDF.
+              <b>To copy:</b> Click the clipboard icon.
               <br />
               <br />If a chordbox is red, the root note is invalid.
             </v-card-text>
@@ -65,11 +65,7 @@
           @change="emitAccidental"
         >
           <!-- flat selection -->
-<<<<<<< HEAD
           <v-tooltip left open-delay="750">
-=======
-          <v-tooltip left>
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 small
@@ -88,11 +84,7 @@
           </v-tooltip>
 
           <!-- sharp selection -->
-<<<<<<< HEAD
           <v-tooltip left open-delay="750">
-=======
-          <v-tooltip left>
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 small
@@ -115,11 +107,7 @@
       <!-- TRANSPOSE SECTION -->
       <!-- transpose up button -->
       <v-col class="py-0 my-0" cols="1" align="right" justify="center">
-<<<<<<< HEAD
         <v-tooltip right open-delay="750">
-=======
-        <v-tooltip right>
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               small
@@ -141,11 +129,7 @@
         </v-tooltip>
 
         <!-- transpose down button -->
-<<<<<<< HEAD
         <v-tooltip right open-delay="750">
-=======
-        <v-tooltip right>
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="py-0 my-0"
@@ -205,11 +189,7 @@
     <v-row align="center">
       <!-- SUBMIT BUTTON -->
       <v-col class="py-0 my-0" cols="2">
-<<<<<<< HEAD
         <v-tooltip right open-delay="750">
-=======
-        <v-tooltip bottom>
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               small
@@ -236,11 +216,7 @@
       <!-- COPY + EXPORT BUTTONS -->
       <v-col class="py-0 my-0" cols="1" offset="8">
         <!-- copy button -->
-<<<<<<< HEAD
         <v-tooltip left open-delay="750">
-=======
-        <v-tooltip left>
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               @click="copyText"
@@ -259,32 +235,6 @@
           <span>copy lyrics + chords</span>
         </v-tooltip>
       </v-col>
-
-      <v-col class="py-0 my-0" cols="1">
-        <!-- export button -->
-<<<<<<< HEAD
-        <v-tooltip right open-delay="750">
-=======
-        <v-tooltip right>
->>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              @click="exportPDF"
-              class="py-1 my-0"
-              small
-              text
-              block
-              color="#5F917A"
-              :disabled="!lyricArray"
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-download</v-icon>
-            </v-btn>
-          </template>
-          <span>download as PDF</span>
-        </v-tooltip>
-      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -300,13 +250,14 @@ export default {
     dialog: false,
     clipboardIcon: "clipboard-outline",
     accidental: "flat",
-    disableTranspose: true,
+    disableTranspose: true
   }),
 
   methods: {
     lyricsDone() {
       this.transposeN = 0;
       this.lyricArray = this.lyrics.split("\n");
+      EventBus.$emit("resetTranspose");
       this.$emit("lyricsDone", this.lyricArray);
       this.clipboardIcon = "clipboard-outline";
     },
@@ -319,9 +270,6 @@ export default {
       console.log(this.transposeN);
       EventBus.$emit("transposeChanged", this.transposeN);
     },
-    exportPDF() {
-      this.$emit("export");
-    },
     copyText() {
       this.$emit("copyText");
       this.clipboardIcon = "clipboard-check";
@@ -329,7 +277,7 @@ export default {
     emitAccidental() {
       EventBus.$emit("accidentalChanged", this.accidental);
       this.clipboardIcon = "clipboard-outline";
-    },
+    }
   },
   created() {
     EventBus.$on("disableTranspose", (dt) => {
@@ -337,8 +285,12 @@ export default {
     });
     EventBus.$on("resetCopy", () => {
       this.clipboardIcon = "clipboard-outline";
+      // Reset fires on any time a chord is changed
+      // or CREATED in a chord box, so we want
+      // to capture the accidental as well.
+      EventBus.$emit("accidentalChanged", this.accidental);
     });
-  },
+  }
 };
 </script>
 
