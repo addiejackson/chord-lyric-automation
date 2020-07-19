@@ -9,7 +9,7 @@
         @chordEntered="captureChord($event, index)"
         :style="'padding-right:' + chordSpaces[index] + 'ch;'"
         :chord="arrowChord"
-        @disableTranspose="andDisable"
+        @disableTranspose="andDisable($event, index)"
       />
     </div>
   </div>
@@ -42,7 +42,10 @@ export default {
       EventBus.$emit("resetCopy");
     },
     andDisable(disable, index) {
+      console.log(index);
+      console.log(disable);
       this.badChords.splice(index, 1, disable);
+      console.log(this.badChords);
       this.badChordLine = this.badChords.some((badChord) => badChord == true);
       EventBus.$emit("disableTranspose", this.badChordLine);
     }

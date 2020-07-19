@@ -8,6 +8,7 @@
       v-model="chordInput"
       @input="resizeInput"
       class="chordBox"
+      autocomplete="off"
     />
   </span>
 </template>
@@ -48,7 +49,7 @@ export default {
         this.chordBoxSize = 1;
       }
       if (!this.isolateKey() && this.chordInput) {
-        this.chordBoxAlert = "background-color:#DB848D;";
+        this.chordBoxAlert = "background-color:#DB848D !important;";
         this.originalKey = null;
         this.$emit("disableTranspose", true);
       } else {
@@ -63,7 +64,11 @@ export default {
         this.chordSuffix = this.chordInput.substring(2);
         return root;
       }
-      if (this.keys.includes(root[0])) {
+      if (
+        this.keys.includes(root[0]) &&
+        ((root[1] != "#" && this.accidental == "flat") ||
+          (root[1] != "b" && this.accidental == "sharp"))
+      ) {
         this.chordSuffix = this.chordInput.substring(1);
         return root[0];
       }
