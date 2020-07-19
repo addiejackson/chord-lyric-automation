@@ -65,7 +65,11 @@
           @change="emitAccidental"
         >
           <!-- flat selection -->
+<<<<<<< HEAD
           <v-tooltip left open-delay="750">
+=======
+          <v-tooltip left>
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 small
@@ -84,7 +88,11 @@
           </v-tooltip>
 
           <!-- sharp selection -->
+<<<<<<< HEAD
           <v-tooltip left open-delay="750">
+=======
+          <v-tooltip left>
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 small
@@ -107,7 +115,11 @@
       <!-- TRANSPOSE SECTION -->
       <!-- transpose up button -->
       <v-col class="py-0 my-0" cols="1" align="right" justify="center">
+<<<<<<< HEAD
         <v-tooltip right open-delay="750">
+=======
+        <v-tooltip right>
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               small
@@ -129,7 +141,11 @@
         </v-tooltip>
 
         <!-- transpose down button -->
+<<<<<<< HEAD
         <v-tooltip right open-delay="750">
+=======
+        <v-tooltip right>
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="py-0 my-0"
@@ -189,7 +205,11 @@
     <v-row align="center">
       <!-- SUBMIT BUTTON -->
       <v-col class="py-0 my-0" cols="2">
+<<<<<<< HEAD
         <v-tooltip right open-delay="750">
+=======
+        <v-tooltip bottom>
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               small
@@ -216,7 +236,11 @@
       <!-- COPY + EXPORT BUTTONS -->
       <v-col class="py-0 my-0" cols="1" offset="8">
         <!-- copy button -->
+<<<<<<< HEAD
         <v-tooltip left open-delay="750">
+=======
+        <v-tooltip left>
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               @click="copyText"
@@ -238,7 +262,11 @@
 
       <v-col class="py-0 my-0" cols="1">
         <!-- export button -->
+<<<<<<< HEAD
         <v-tooltip right open-delay="750">
+=======
+        <v-tooltip right>
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               @click="exportPDF"
@@ -277,6 +305,7 @@ export default {
 
   methods: {
     lyricsDone() {
+      this.transposeN = 0;
       this.lyricArray = this.lyrics.split("\n");
       this.$emit("lyricsDone", this.lyricArray);
       this.clipboardIcon = "clipboard-outline";

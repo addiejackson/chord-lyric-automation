@@ -19,7 +19,7 @@ export default {
   data: () => ({
     chordBoxSize: 1,
     chordInput: "",
-    key: "",
+    originalKey: "",
     keys: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
     missedTransposes: 0,
     transposedKey: null,
@@ -49,8 +49,7 @@ export default {
       if (this.chordBoxSize <= 1) {
         this.chordBoxSize = 1;
       }
-      this.key = this.isolateKey();
-      if (!this.key && this.chordInput) {
+      if (!this.originalKey && this.chordInput) {
         this.chordBoxAlert = "background-color:#DB848D;";
         this.$emit("disableTranspose", true);
       } else {
@@ -61,12 +60,6 @@ export default {
     },
     isolateKey() {
       let root = this.chordInput.substring(0, 2);
-      if (
-        (root[1] == "b" && this.accidental == "sharp") ||
-        (root[1] == "#" && this.accidental == "flat")
-      ) {
-        return null;
-      }
       if (this.keys.includes(root)) {
         this.chordSuffix = this.chordInput.substring(2);
         return root;
@@ -78,8 +71,13 @@ export default {
       return null;
     },
     transpose(transposeN) {
-      if (this.key) {
-        let keyPos = this.keys.indexOf(this.key);
+      console.log(transposeN);
+      if (!this.originalKey) {
+        // this.transposedKey = this.originalKey;
+        this.missedTransposes = transposeN;
+      }
+      if (this.originalKey) {
+        let keyPos = this.keys.indexOf(this.originalKey);
         let transposedPos = keyPos + transposeN - this.missedTransposes;
         transposedPos = transposedPos % 12;
         if (transposedPos < 0) {
@@ -89,44 +87,32 @@ export default {
         this.chordInput = this.transposedKey + this.chordSuffix;
         this.chordBoxSize = this.chordInput.length;
         this.$emit("chordEntered", this.chordInput);
-      } else {
-        this.missedTransposes = transposeN;
       }
     },
   },
   mounted() {
-    if (this.chord) {
-      this.chordInput = this.chord;
-      this.resizeInput();
-    }
+    console.log("mounted");
+    this.chordInput = this.chord;
+    this.originalKey = this.isolateKey();
+    console.log(this.originalKey);
+    this.resizeInput();
   },
   watch: {
     transposeN: function() {
       this.transpose(this.transposeN);
     },
     chord: function() {
+      if (!this.originalKey) {
+        this.originalKey = this.isolateKey();
+      }
       this.chordInput = this.chord;
       this.resizeInput();
     },
     accidental: function() {
-      // this.key = this.isolateKey();
-      let keyPos = this.keys.indexOf(this.key);
-      if (this.accidental == "flat") {
-        this.keys = [
-          "C",
-          "Db",
-          "D",
-          "Eb",
-          "E",
-          "F",
-          "Gb",
-          "G",
-          "Ab",
-          "A",
-          "Bb",
-          "B",
-        ];
-      } else if (this.accidental == "sharp") {
+      let key = this.isolateKey();
+      let keyPos = this.keys.indexOf(key);
+      let originalKeyPos = this.keys.indexOf(this.originalKey);
+      if (this.accidental == "sharp") {
         this.keys = [
           "C",
           "C#",
@@ -138,13 +124,40 @@ export default {
           "G",
           "G#",
           "A",
+<<<<<<< HEAD
+          "Bb",
+          "B",
+=======
+          "A#",
+          "B"
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
+        ];
+      } else {
+        this.keys = [
+          "C",
+          "Db",
+          "D",
+          "Eb",
+          "E",
+          "F",
+          "Gb",
+          "G",
+          "Ab",
+          "A",
+<<<<<<< HEAD
           "A#",
           "B",
+=======
+          "Bb",
+          "B"
+>>>>>>> mostly working, still need to set transposen = 0 on lyric updates, but eventbus will help that
         ];
       }
-      if (this.key) {
-        this.key = this.keys[keyPos];
-        this.chordInput = this.key + this.chordSuffix;
+      if (key) {
+        key = this.keys[keyPos];
+        this.chordInput = key + this.chordSuffix;
+        this.transposedKey = key;
+        this.originalKey = this.keys[originalKeyPos];
       }
     },
   },
