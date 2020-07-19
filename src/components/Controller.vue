@@ -214,7 +214,7 @@
       </v-col>
 
       <!-- COPY + EXPORT BUTTONS -->
-      <v-col class="py-0 my-0" cols="1" offset="8">
+      <v-col class="py-0 my-0" cols="1" offset="9">
         <!-- copy button -->
         <v-tooltip left open-delay="750">
           <template v-slot:activator="{ on, attrs }">

@@ -47,8 +47,9 @@ export default {
       if (this.chordBoxSize <= 1) {
         this.chordBoxSize = 1;
       }
-      if (!this.originalKey && this.chordInput) {
+      if (!this.isolateKey() && this.chordInput) {
         this.chordBoxAlert = "background-color:#DB848D;";
+        this.originalKey = null;
         this.$emit("disableTranspose", true);
       } else {
         this.chordBoxAlert = "";
@@ -69,7 +70,6 @@ export default {
       return null;
     },
     transpose(transposeN) {
-      console.log(transposeN);
       if (!this.originalKey) {
         // this.transposedKey = this.originalKey;
         this.missedTransposes = transposeN;
@@ -160,9 +160,6 @@ export default {
   padding: 0;
   box-sizing: content-box;
   cursor: pointer;
-}
-
-.nonExporting {
   border-bottom: 1px solid gray;
   border-radius: 1px;
   background-color: lightgrey;
