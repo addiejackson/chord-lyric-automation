@@ -5,7 +5,10 @@
       <!-- page title -->
       <v-col class="pt-0 my-0 pb-3 pr-0" cols="9" align="left">
         <p>
-          <v-icon style="vertical-align:middle;margin-bottom:5px; color:#5F917A;">mdi-music-note</v-icon>
+          <v-icon
+            style="vertical-align:middle;margin-bottom:5px; color:#5F917A;"
+            >mdi-music-note</v-icon
+          >
           <b>Bowstring</b>
         </p>
 
@@ -28,15 +31,16 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title class="headline" primary-title>Bowstring Help</v-card-title>
+            <v-card-title class="headline" primary-title
+              >Bowstring Help</v-card-title
+            >
             <v-divider></v-divider>
             <v-card-text>
               <br />
               <b>To add a solo chordbox:</b> Type a ">" followed by the chord
-              (i.e.
-              <code>>Gmaj7</code>).
+              (i.e. <code>>Gmaj7</code>).
               <br />
-              <b>To export:</b> Click the download button to export to PDF.
+              <b>To copy:</b> Click the clipboard icon.
               <br />
               <br />If a chordbox is red, the root note is invalid.
             </v-card-text>
@@ -61,8 +65,8 @@
           @change="emitAccidental"
         >
           <!-- flat selection -->
-          <v-tooltip left>
-            <template v-slot:activator="{on, attrs}">
+          <v-tooltip left open-delay="750">
+            <template v-slot:activator="{ on, attrs }">
               <v-btn
                 small
                 depressed
@@ -80,8 +84,8 @@
           </v-tooltip>
 
           <!-- sharp selection -->
-          <v-tooltip left>
-            <template v-slot:activator="{on, attrs}">
+          <v-tooltip left open-delay="750">
+            <template v-slot:activator="{ on, attrs }">
               <v-btn
                 small
                 depressed
@@ -103,8 +107,8 @@
       <!-- TRANSPOSE SECTION -->
       <!-- transpose up button -->
       <v-col class="py-0 my-0" cols="1" align="right" justify="center">
-        <v-tooltip right>
-          <template v-slot:activator="{on, attrs}">
+        <v-tooltip right open-delay="750">
+          <template v-slot:activator="{ on, attrs }">
             <v-btn
               small
               text
@@ -112,7 +116,7 @@
               class="py-0 my-0"
               :disabled="disableTranspose"
               color="#5F917A"
-              @click="transposeUp()"
+              @click="transpose(1)"
               name="transposeUp"
               style="min-width:0px; padding:10px;"
               v-bind="attrs"
@@ -125,15 +129,15 @@
         </v-tooltip>
 
         <!-- transpose down button -->
-        <v-tooltip right>
-          <template v-slot:activator="{on, attrs}">
+        <v-tooltip right open-delay="750">
+          <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="py-0 my-0"
               small
               text
               fab
               color="#5F917A"
-              @click="transposeDown()"
+              @click="transpose(-1)"
               name="transposeDown"
               :disabled="disableTranspose"
               style="min-width:0px; padding:10px;"
@@ -185,8 +189,8 @@
     <v-row align="center">
       <!-- SUBMIT BUTTON -->
       <v-col class="py-0 my-0" cols="2">
-        <v-tooltip bottom>
-          <template v-slot:activator="{on, attrs}">
+        <v-tooltip right open-delay="750">
+          <template v-slot:activator="{ on, attrs }">
             <v-btn
               small
               depressed
@@ -194,9 +198,9 @@
               color="#5F917A"
               style="color:white;"
               @click="
-            lyricsDone();
-            titleEntered();
-          "
+                lyricsDone();
+                titleEntered();
+              "
               name="submitLyrics"
               tabindex="3"
               v-bind="attrs"
@@ -212,8 +216,8 @@
       <!-- COPY + EXPORT BUTTONS -->
       <v-col class="py-0 my-0" cols="1" offset="8">
         <!-- copy button -->
-        <v-tooltip left>
-          <template v-slot:activator="{on, attrs}">
+        <v-tooltip left open-delay="750">
+          <template v-slot:activator="{ on, attrs }">
             <v-btn
               @click="copyText"
               class="py-1 my-0"
@@ -231,33 +235,12 @@
           <span>copy lyrics + chords</span>
         </v-tooltip>
       </v-col>
-
-      <v-col class="py-0 my-0" cols="1">
-        <!-- export button -->
-        <v-tooltip right>
-          <template v-slot:activator="{on, attrs}">
-            <v-btn
-              @click="exportPDF"
-              class="py-1 my-0"
-              small
-              text
-              block
-              color="#5F917A"
-              :disabled="!lyricArray"
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-download</v-icon>
-            </v-btn>
-          </template>
-          <span>download as PDF</span>
-        </v-tooltip>
-      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { EventBus } from "./EventBus.js";
 export default {
   data: () => ({
     lyrics: "",
@@ -266,14 +249,15 @@ export default {
     transposeN: 0,
     dialog: false,
     clipboardIcon: "clipboard-outline",
-    accidental: "flat"
+    accidental: "flat",
+    disableTranspose: true
   }),
-  props: {
-    disableTranspose: Boolean
-  },
+
   methods: {
     lyricsDone() {
+      this.transposeN = 0;
       this.lyricArray = this.lyrics.split("\n");
+      EventBus.$emit("resetTranspose");
       this.$emit("lyricsDone", this.lyricArray);
       this.clipboardIcon = "clipboard-outline";
     },
@@ -281,27 +265,31 @@ export default {
       this.$emit("titleEntered", this.title);
       this.clipboardIcon = "clipboard-outline";
     },
-    transposeUp() {
-      this.transposeN = this.transposeN + 1;
-      this.$emit("transposeChanged", this.transposeN);
-      this.clipboardIcon = "clipboard-outline";
-    },
-    transposeDown() {
-      this.transposeN = this.transposeN - 1;
-      this.$emit("transposeChanged", this.transposeN);
-      this.clipboardIcon = "clipboard-outline";
-    },
-    exportPDF() {
-      this.$emit("export");
+    transpose(direction) {
+      this.transposeN += direction;
+      console.log(this.transposeN);
+      EventBus.$emit("transposeChanged", this.transposeN);
     },
     copyText() {
       this.$emit("copyText");
       this.clipboardIcon = "clipboard-check";
     },
     emitAccidental() {
-      this.$emit("accidentalChanged", this.accidental);
+      EventBus.$emit("accidentalChanged", this.accidental);
       this.clipboardIcon = "clipboard-outline";
     }
+  },
+  created() {
+    EventBus.$on("disableTranspose", (dt) => {
+      this.disableTranspose = dt;
+    });
+    EventBus.$on("resetCopy", () => {
+      this.clipboardIcon = "clipboard-outline";
+      // Reset fires on any time a chord is changed
+      // or CREATED in a chord box, so we want
+      // to capture the accidental as well.
+      EventBus.$emit("accidentalChanged", this.accidental);
+    });
   }
 };
 </script>
