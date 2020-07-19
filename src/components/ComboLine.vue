@@ -3,13 +3,9 @@
     <v-row>
       <v-col class="py-0 mt-0">
         <ChordLine
-          :exporting="exporting"
-          :accidental="accidental"
           :chordSpaces="chordSpaces"
           :arrowChords="chords"
-          :transposeN="transposeN"
           @chordsEntered="captureChords($event)"
-          @disableTranspose="disable($event)"
         />
       </v-col>
     </v-row>
@@ -38,20 +34,14 @@ export default {
   mixins: [DismantleLyric],
   data: () => ({
     cwMap: [],
-    currentLyric: ""
+    currentLyric: "",
   }),
   props: {
     lyric: String,
-    transposeN: Number,
-    exporting: Boolean,
-    accidental: String
   },
   methods: {
     captureChords(chordInfo) {
       this.chords = chordInfo;
-    },
-    disable(disable) {
-      this.$emit("disableTranspose", disable);
     },
     updateCWMap(mounted = false) {
       let words = this.dismantleLyric(this.lyric);
@@ -66,12 +56,12 @@ export default {
           if (idx < this.cwMap.length) {
             updatedCWMap.splice(idx, 1, {
               word: word,
-              chord: ""
+              chord: "",
             });
           } else {
             updatedCWMap.push({
               word: word,
-              chord: ""
+              chord: "",
             });
           }
         });
@@ -91,7 +81,7 @@ export default {
           if (!foundStart) {
             updatedCWMap.splice(idx, 0, {
               word: word,
-              chord: ""
+              chord: "",
             });
           } else {
             updatedCWMap.push(...this.cwMap);
@@ -108,7 +98,7 @@ export default {
         if (word[0] == ">") {
           updatedCWMap.splice(idx, 1, {
             word: "",
-            chord: word.substring(1)
+            chord: word.substring(1),
           });
         }
       });
@@ -137,12 +127,12 @@ export default {
         cw.push(cl[name]);
       });
       return cw;
-    }
+    },
   },
   watch: {
     lyric: function() {
       this.updateCWMap();
-    }
+    },
   },
   computed: {
     wordSpaces: function() {
@@ -165,7 +155,7 @@ export default {
       },
       set: function(chordInfo) {
         this.cwMap[chordInfo.index].chord = chordInfo.chord;
-      }
+      },
     },
     words: function() {
       return this.getFromCL("word");
@@ -176,7 +166,7 @@ export default {
         return words.every((val) => val == "");
       }
       return false;
-    }
+    },
   },
   mounted() {
     this.updateCWMap(true);
@@ -184,8 +174,8 @@ export default {
   },
   components: {
     ChordLine,
-    LyricLine
-  }
+    LyricLine,
+  },
 };
 </script>
 

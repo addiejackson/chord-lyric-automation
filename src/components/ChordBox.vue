@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { EventBus } from "./EventBus.js";
 export default {
   data: () => ({
     chordBoxSize: 1,
@@ -23,13 +24,24 @@ export default {
     missedTransposes: 0,
     transposedKey: null,
     chordSuffix: "",
-    chordBoxAlert: ""
+    chordBoxAlert: "",
+    exporting: false,
+    transposeN: 0,
+    accidental: "flat",
   }),
   props: {
-    transposeN: Number,
-    exporting: Boolean,
     chord: String,
-    accidental: String
+  },
+  created() {
+    EventBus.$on("accidentalChanged", (accidental) => {
+      this.accidental = accidental;
+    });
+    EventBus.$on("exporting", (exporting) => {
+      this.exporting = exporting;
+    });
+    EventBus.$on("transposeChanged", (tN) => {
+      this.transposeN = tN;
+    });
   },
   methods: {
     resizeInput() {
@@ -80,7 +92,7 @@ export default {
       } else {
         this.missedTransposes = transposeN;
       }
-    }
+    },
   },
   mounted() {
     if (this.chord) {
@@ -112,7 +124,7 @@ export default {
           "Ab",
           "A",
           "Bb",
-          "B"
+          "B",
         ];
       } else if (this.accidental == "sharp") {
         this.keys = [
@@ -127,28 +139,28 @@ export default {
           "G#",
           "A",
           "A#",
-          "B"
+          "B",
         ];
       }
       if (this.key) {
         this.key = this.keys[keyPos];
         this.chordInput = this.key + this.chordSuffix;
       }
-    }
+    },
   },
   computed: {
     chordBoxDynamicClass: function() {
       if (!this.exporting) {
         return {
-          nonExporting: true
+          nonExporting: true,
         };
       } else {
         return {
-          nonExporting: false
+          nonExporting: false,
         };
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
