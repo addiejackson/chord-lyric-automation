@@ -250,7 +250,7 @@ export default {
     dialog: false,
     clipboardIcon: "clipboard-outline",
     accidental: "flat",
-    disableTranspose: true
+    disableTranspose: true,
   }),
 
   methods: {
@@ -277,7 +277,7 @@ export default {
     emitAccidental() {
       EventBus.$emit("accidentalChanged", this.accidental);
       this.clipboardIcon = "clipboard-outline";
-    }
+    },
   },
   created() {
     EventBus.$on("disableTranspose", (dt) => {
@@ -290,7 +290,10 @@ export default {
       // to capture the accidental as well.
       EventBus.$emit("accidentalChanged", this.accidental);
     });
-  }
+    EventBus.$on("clearTranspose", () => {
+      this.transposeN = 0;
+    });
+  },
 };
 </script>
 

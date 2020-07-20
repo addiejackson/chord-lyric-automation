@@ -4,7 +4,7 @@
       <v-col class="py-0 mt-0">
         <ChordLine
           :chordSpaces="chordSpaces"
-          :arrowChords="chords"
+          :incomingChords="incomingChords"
           @chordsEntered="captureChords($event)"
         />
       </v-col>
@@ -35,6 +35,7 @@ export default {
   data: () => ({
     cwMap: [],
     currentLyric: "",
+    incomingChords: null,
   }),
   props: {
     lyric: String,
@@ -132,6 +133,7 @@ export default {
   watch: {
     lyric: function() {
       this.updateCWMap();
+      this.incomingChords = this.chords;
     },
   },
   computed: {
@@ -171,6 +173,7 @@ export default {
   mounted() {
     this.updateCWMap(true);
     this.currentLyric = this.lyric;
+    this.incomingChords = this.chords;
   },
   components: {
     ChordLine,

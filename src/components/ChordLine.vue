@@ -1,15 +1,16 @@
 <template>
   <div>
     <div
-      v-for="(arrowChord, index) in arrowChords"
+      v-for="(incomingChord, index) in incomingChords"
       :key="index"
       class="sameLine"
     >
       <ChordBox
         @chordEntered="captureChord($event, index)"
         :style="'padding-right:' + chordSpaces[index] + 'ch;'"
-        :chord="arrowChord"
+        :incomingChord="incomingChord"
         @disableTranspose="andDisable($event, index)"
+        :accidental="accidental"
       />
     </div>
   </div>
@@ -25,39 +26,45 @@ export default {
   mixins: [DismantleLyric],
   data: () => ({
     wordCount: 1,
-    chords: null, // will need to capture this from ChordBox,
+    chords: [], // will need to capture this from ChordBox,
     badChords: null,
     badChordLine: false,
-    words: null
+    words: null,
+    accidental: "flat",
   }),
   props: {
-    arrowChords: Array,
+    incomingChords: Array,
     chordSpaces: Array,
-    line: Number
+    line: Number,
   },
   methods: {
     captureChord(val, index) {
+      if (!this.chords) {
+        this.chords = Array(this.incomingChords.length);
+      }
       this.chords.splice(index, 1, val);
       this.$emit("chordsEntered", { chord: val, index: index });
       EventBus.$emit("resetCopy");
     },
     andDisable(disable, index) {
-      console.log(index);
-      console.log(disable);
       this.badChords.splice(index, 1, disable);
-      console.log(this.badChords);
       this.badChordLine = this.badChords.some((badChord) => badChord == true);
       EventBus.$emit("disableTranspose", this.badChordLine);
-    }
+    },
   },
   mounted() {
-    this.chords = this.arrowChords;
+    this.chords = this.incomingChords;
     this.badChords = Array(this.wordCount);
     this.badChords.fill(false);
   },
+  created() {
+    EventBus.$on("accidentalChanged", (accidental) => {
+      this.accidental = accidental;
+    });
+  },
   components: {
-    ChordBox
-  }
+    ChordBox,
+  },
 };
 </script>
 
