@@ -43,6 +43,9 @@ export default {
         this.chords = Array(this.incomingChords.length);
       }
       this.chords.splice(index, 1, val);
+      if (this.chords.every((chord) => chord == false)) {
+        EventBus.$emit("chordLineEmpty");
+      }
       this.$emit("chordsEntered", { chord: val, index: index });
       EventBus.$emit("resetCopy");
     },

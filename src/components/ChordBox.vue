@@ -8,6 +8,7 @@
       @input="chordHandler"
       class="chordBox"
       autocomplete="off"
+      tabindex="4"
     />
   </span>
 </template>
@@ -25,6 +26,7 @@ export default {
     rootPos: 0,
     missedTransposes: 0,
     transposeCount: 0,
+    isLowercase: false,
   }),
   props: {
     incomingChord: String,
@@ -44,9 +46,6 @@ export default {
   },
   methods: {
     validateRoot() {
-      console.log(this.chordInput);
-      console.log(this.rootSet);
-      console.log(this.accidental);
       if (this.chordInput) {
         let potentialRoot = this.chordInput.substring(0, 2);
         if (this.rootSet.includes(potentialRoot)) {
@@ -106,17 +105,31 @@ export default {
           "B",
         ];
       }
+      if (this.isLowercase) {
+        this.rootSet = this.rootSet.map((v) => v.toLowerCase());
+      }
     },
     getSuffix() {
       this.chordSuffix = this.chordInput.replace(this.root, "");
     },
     chordHandler() {
       this.resizeChordBox();
+      this.checkLowercase();
       this.updateRootSet();
       this.validateRoot();
+
       if (this.root) {
         this.indexRoot();
         this.getSuffix();
+        this.missedTransposes = this.transposeCount;
+      }
+    },
+    checkLowercase() {
+      let potentialRoot = this.chordInput.substring(0, 2);
+      if (potentialRoot === potentialRoot.toLowerCase()) {
+        this.isLowercase = true;
+      } else {
+        this.isLowercase = false;
       }
     },
     resizeChordBox() {
@@ -125,6 +138,7 @@ export default {
         this.chordBoxSize = 1;
       }
       this.$emit("chordEntered", this.chordInput);
+      EventBus.$emit("chordChanged");
     },
     indexRoot() {
       this.rootPos = this.rootSet.indexOf(this.root);
@@ -133,11 +147,17 @@ export default {
       if (this.chordInput) {
         let transposedPos =
           this.rootPos + this.transposeCount - this.missedTransposes;
+
+        console.log("rootPos:", this.rootPos);
+        console.log("transposeCount:", this.transposeCount);
+        console.log("missedTransposes:", this.missedTransposes);
+        console.log("tranposedPos1:", transposedPos);
         // Ensure rootSet is a never-ending array
         transposedPos = transposedPos % 12;
         if (transposedPos < 0) {
           transposedPos = transposedPos + 12;
         }
+        console.log("tranposedPos2:", transposedPos);
         this.chordInput = this.rootSet[transposedPos] + this.chordSuffix;
         this.resizeChordBox();
       } else {
