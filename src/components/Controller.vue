@@ -165,7 +165,7 @@
           label="Project/Song Title"
           hide-details
           tabindex="1"
-          style="font-weight:bold;"
+          autocomplete="off"
         />
       </v-col>
 
@@ -183,6 +183,7 @@
           full-width
           placeholder="Enter your lyrics!"
           tabindex="2"
+          autocomplete="off"
         ></v-textarea>
       </v-col>
     </v-row>
@@ -228,6 +229,7 @@
               :disabled="!lyricArray"
               v-bind="attrs"
               v-on="on"
+              tabindex="5"
             >
               <v-icon>{{ `mdi-${clipboardIcon}` }}</v-icon>
             </v-btn>
@@ -267,7 +269,6 @@ export default {
     },
     transpose(direction) {
       this.transposeN += direction;
-      console.log(this.transposeN);
       EventBus.$emit("transposeChanged", this.transposeN);
     },
     copyText() {
@@ -279,6 +280,7 @@ export default {
       this.clipboardIcon = "clipboard-outline";
     },
   },
+
   created() {
     EventBus.$on("disableTranspose", (dt) => {
       this.disableTranspose = dt;
@@ -292,6 +294,14 @@ export default {
     });
     EventBus.$on("clearTranspose", () => {
       this.transposeN = 0;
+    });
+    EventBus.$on("chordChanged", () => {
+      for (const chordBox of document.querySelectorAll(".chordBox")) {
+        if (chordBox.value) {
+          return;
+        }
+      }
+      this.disableTranspose = true;
     });
   },
 };
