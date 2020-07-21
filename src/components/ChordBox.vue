@@ -136,6 +136,7 @@ export default {
       this.chordBoxSize = this.chordInput.length;
       if (this.chordBoxSize <= 1) {
         this.chordBoxSize = 1;
+        this.chordBoxAlert = "";
       }
       this.$emit("chordEntered", this.chordInput);
       EventBus.$emit("chordChanged");
