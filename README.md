@@ -1,4 +1,4 @@
-# chord-lyric-automation
+# Chord Lyric Automation
 ## Goals and Purpose
 Making chord/lyric sheets can be a pain - it's a combination of spaces and tabs, and it can be impossible to standardize. Additionally, it's a manual process to transpose up or down, or between sharp and flat notation. Enter **Bowstring**. 
 
