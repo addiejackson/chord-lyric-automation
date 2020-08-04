@@ -35,7 +35,7 @@ export default {
   data: () => ({
     lyrics: null,
     title: "",
-    output: null,
+    output: null
   }),
   methods: {
     captureLyrics(lyrics) {
@@ -50,15 +50,15 @@ export default {
       );
       // from CopyChordsAndLyrics mixin
       this.copyChordsAndLyrics(spans);
-    },
+    }
   },
   components: {
     ComboLine,
-    Controller,
+    Controller
   },
   mounted() {
     document.title = "Bowstring";
-  },
+  }
 };
 </script>
 

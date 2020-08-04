@@ -5,6 +5,7 @@
         <ChordLine
           :chordSpaces="chordSpaces"
           :incomingChords="incomingChords"
+          :clearAll="clearAll"
           @chordsEntered="captureChords($event)"
         />
       </v-col>
@@ -28,6 +29,7 @@
 import ChordLine from "@/components/ChordLine.vue";
 import LyricLine from "@/components/LyricLine.vue";
 import { DismantleLyric } from "@/mixins/DismantleLyric.js";
+// import { EventBus } from "./EventBus.js";
 
 export default {
   name: "ComboLine",
@@ -35,7 +37,8 @@ export default {
   data: () => ({
     cwMap: [],
     currentLyric: "",
-    incomingChords: null
+    incomingChords: null,
+    clearAll: 0
   }),
   props: {
     lyric: String
@@ -132,7 +135,7 @@ export default {
   },
   watch: {
     lyric: function() {
-      this.incomingChords = null;
+      this.clearAll++;
       this.updateCWMap();
       this.incomingChords = this.chords;
     }
