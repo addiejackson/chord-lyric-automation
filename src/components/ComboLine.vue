@@ -5,6 +5,7 @@
         <ChordLine
           :chordSpaces="chordSpaces"
           :incomingChords="incomingChords"
+          :clearAll="clearAll"
           @chordsEntered="captureChords($event)"
         />
       </v-col>
@@ -28,6 +29,7 @@
 import ChordLine from "@/components/ChordLine.vue";
 import LyricLine from "@/components/LyricLine.vue";
 import { DismantleLyric } from "@/mixins/DismantleLyric.js";
+// import { EventBus } from "./EventBus.js";
 
 export default {
   name: "ComboLine",
@@ -36,9 +38,10 @@ export default {
     cwMap: [],
     currentLyric: "",
     incomingChords: null,
+    clearAll: 0
   }),
   props: {
-    lyric: String,
+    lyric: String
   },
   methods: {
     captureChords(chordInfo) {
@@ -57,12 +60,12 @@ export default {
           if (idx < this.cwMap.length) {
             updatedCWMap.splice(idx, 1, {
               word: word,
-              chord: "",
+              chord: ""
             });
           } else {
             updatedCWMap.push({
               word: word,
-              chord: "",
+              chord: ""
             });
           }
         });
@@ -82,7 +85,7 @@ export default {
           if (!foundStart) {
             updatedCWMap.splice(idx, 0, {
               word: word,
-              chord: "",
+              chord: ""
             });
           } else {
             updatedCWMap.push(...this.cwMap);
@@ -99,7 +102,7 @@ export default {
         if (word[0] == ">") {
           updatedCWMap.splice(idx, 1, {
             word: "",
-            chord: word.substring(1),
+            chord: word.substring(1)
           });
         }
       });
@@ -124,29 +127,30 @@ export default {
     },
     getFromCL(name) {
       let cw = [];
-      this.cwMap.forEach((cl) => {
+      this.cwMap.forEach(cl => {
         cw.push(cl[name]);
       });
       return cw;
-    },
+    }
   },
   watch: {
     lyric: function() {
+      this.clearAll++;
       this.updateCWMap();
       this.incomingChords = this.chords;
-    },
+    }
   },
   computed: {
     wordSpaces: function() {
       let wordSpaces = [];
-      this.cwMap.forEach((cl) => {
+      this.cwMap.forEach(cl => {
         wordSpaces.push(this.getWordSpaces(cl));
       });
       return wordSpaces;
     },
     chordSpaces: function() {
       let chordSpaces = [];
-      this.cwMap.forEach((cl) => {
+      this.cwMap.forEach(cl => {
         chordSpaces.push(this.getChordSpaces(cl));
       });
       return chordSpaces;
@@ -157,7 +161,7 @@ export default {
       },
       set: function(chordInfo) {
         this.cwMap[chordInfo.index].chord = chordInfo.chord;
-      },
+      }
     },
     words: function() {
       return this.getFromCL("word");
@@ -165,10 +169,10 @@ export default {
     onlyChords: function() {
       let words = this.getFromCL("word");
       if (words) {
-        return words.every((val) => val == "");
+        return words.every(val => val == "");
       }
       return false;
-    },
+    }
   },
   mounted() {
     this.updateCWMap(true);
@@ -177,8 +181,8 @@ export default {
   },
   components: {
     ChordLine,
-    LyricLine,
-  },
+    LyricLine
+  }
 };
 </script>
 

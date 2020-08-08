@@ -26,14 +26,15 @@ export default {
     rootPos: 0,
     missedTransposes: 0,
     transposeCount: 0,
-    isLowercase: false,
+    isLowercase: false
   }),
   props: {
     incomingChord: String,
     accidental: String,
+    clearAll: Number
   },
   created() {
-    EventBus.$on("transposeChanged", (transposeCount) => {
+    EventBus.$on("transposeChanged", transposeCount => {
       this.transposeCount = transposeCount;
       this.transpose();
     });
@@ -87,7 +88,7 @@ export default {
           "Ab",
           "A",
           "Bb",
-          "B",
+          "B"
         ];
       } else if (this.accidental == "sharp") {
         this.rootSet = [
@@ -102,11 +103,11 @@ export default {
           "G#",
           "A",
           "A#",
-          "B",
+          "B"
         ];
       }
       if (this.isLowercase) {
-        this.rootSet = this.rootSet.map((v) => v.toLowerCase());
+        this.rootSet = this.rootSet.map(v => v.toLowerCase());
       }
     },
     getSuffix() {
@@ -149,16 +150,11 @@ export default {
         let transposedPos =
           this.rootPos + this.transposeCount - this.missedTransposes;
 
-        console.log("rootPos:", this.rootPos);
-        console.log("transposeCount:", this.transposeCount);
-        console.log("missedTransposes:", this.missedTransposes);
-        console.log("tranposedPos1:", transposedPos);
         // Ensure rootSet is a never-ending array
         transposedPos = transposedPos % 12;
         if (transposedPos < 0) {
           transposedPos = transposedPos + 12;
         }
-        console.log("tranposedPos2:", transposedPos);
         this.chordInput = this.rootSet[transposedPos] + this.chordSuffix;
         this.resizeChordBox();
       } else {
@@ -177,18 +173,40 @@ export default {
         this.root = this.rootSet[this.rootPos];
         this.chordInput = this.root + this.chordSuffix;
       }
-    },
+    }
   },
   watch: {
     accidental: function() {
       this.transmuteRoot();
       this.chordHandler();
     },
+    clearAll: function() {
+      if (this.chordInput) {
+        this.chordInput = "";
+        this.chordHandler();
+      }
+    },
     incomingChord: function() {
       this.chordInput = this.incomingChord;
       this.chordHandler();
     },
+    incomingChordAndClearAll: function(newVal, oldVal) {
+      const oldClearAll = oldVal.split("|")[1];
+      const [newIncomingChord, newClearAll] = newVal.split("|");
+      if (newClearAll != oldClearAll) {
+        this.chordInput = "";
+      }
+      if (newIncomingChord) {
+        this.chordInput = this.incomingChord;
+      }
+      this.chordHandler();
+    }
   },
+  computed: {
+    incomingChordAndClearAll() {
+      return `${this.incomingChord}|${this.clearAll}`;
+    }
+  }
 };
 </script>
 

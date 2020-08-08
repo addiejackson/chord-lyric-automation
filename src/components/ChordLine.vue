@@ -11,6 +11,7 @@
         :incomingChord="incomingChord"
         @disableTranspose="andDisable($event, index)"
         :accidental="accidental"
+        :clearAll="clearAll"
       />
     </div>
   </div>
@@ -30,12 +31,13 @@ export default {
     badChords: null,
     badChordLine: false,
     words: null,
-    accidental: "flat",
+    accidental: "flat"
   }),
   props: {
     incomingChords: Array,
     chordSpaces: Array,
     line: Number,
+    clearAll: Number
   },
   methods: {
     captureChord(val, index) {
@@ -43,7 +45,7 @@ export default {
         this.chords = Array(this.incomingChords.length);
       }
       this.chords.splice(index, 1, val);
-      if (this.chords.every((chord) => chord == false)) {
+      if (this.chords.every(chord => chord == false)) {
         EventBus.$emit("chordLineEmpty");
       }
       this.$emit("chordsEntered", { chord: val, index: index });
@@ -51,9 +53,9 @@ export default {
     },
     andDisable(disable, index) {
       this.badChords.splice(index, 1, disable);
-      this.badChordLine = this.badChords.some((badChord) => badChord == true);
+      this.badChordLine = this.badChords.some(badChord => badChord == true);
       EventBus.$emit("disableTranspose", this.badChordLine);
-    },
+    }
   },
   mounted() {
     this.chords = this.incomingChords;
@@ -61,13 +63,13 @@ export default {
     this.badChords.fill(false);
   },
   created() {
-    EventBus.$on("accidentalChanged", (accidental) => {
+    EventBus.$on("accidentalChanged", accidental => {
       this.accidental = accidental;
     });
   },
   components: {
-    ChordBox,
-  },
+    ChordBox
+  }
 };
 </script>
 
