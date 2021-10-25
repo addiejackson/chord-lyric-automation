@@ -180,8 +180,16 @@
     },
     watch: {
       incomingChord: function() {
-        console.log("incoming chord changed");
         this.chordInput = this.incomingChord;
+        this.$store.commit("updateChords", {
+          lineIndex: this.lineIndex,
+          chordIndex: this.chordIndex,
+          chord: this.chordInput,
+        });
+        this.chordHandler();
+      },
+      chordInput() {
+        console.log("change");
         this.$store.commit("updateChords", {
           lineIndex: this.lineIndex,
           chordIndex: this.chordIndex,

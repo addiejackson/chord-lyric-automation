@@ -70,6 +70,11 @@
     computed: {
       chordLyricMap: {
         get() {
+          if (
+            typeof this.$store.state.chordLyricMap[this.index] === "undefined"
+          ) {
+            this.updateCLMap();
+          }
           return this.$store.state.chordLyricMap[this.index];
         },
         set(cCsWWs) {
@@ -81,7 +86,7 @@
       },
       chords: {
         get() {
-          return this.$store.state.chordLyricMap[this.index].chords;
+          return this.chordLyricMap.chords;
         },
         set(chordInfo) {
           let payload = {
@@ -92,14 +97,9 @@
           this.$store.commit("updateChords", payload);
         },
       },
-      chordSpaces: {
-        get() {
-          return this.$store.state.chordLyricMap[this.index].chordSpaces;
-        },
-      },
       lyrics: {
         get() {
-          return this.$store.state.chordLyricMap[this.index].lyrics;
+          return this.chordLyricMap.lyrics;
         },
         set(lyricInfo) {
           let payload = {
@@ -110,13 +110,8 @@
           this.$store.commit("updateLyrics", payload);
         },
       },
-      lyricSpaces: {
-        get() {
-          return this.$store.state.chordLyricMap[this.index].lyricSpaces;
-        },
-      },
       onlyChords: function() {
-        if (this.lyrics) {
+        if (this.chordLyricMap && this.lyrics) {
           return this.lyrics.every(val => val == "");
         }
         return false;

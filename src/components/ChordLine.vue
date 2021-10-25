@@ -3,7 +3,7 @@
     <div v-for="(chord, chordIndex) in chords" :key="chordIndex" class="sameLine">
       <ChordBox
         @chordEntered="captureChord($event, index)"
-        :style="'padding-right:' + chordSpaces[index] + 'ch;'"
+        :style="'padding-right:' + chordSpaces[chordIndex] + 'ch;'"
         :incomingChord="chord"
         :chordIndex="chordIndex"
         :clearAll="clearAll"

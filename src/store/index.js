@@ -16,17 +16,13 @@ function computeChordSpaces(state, chord, lineIndex, index) {
   return 1
 }
 
-function computeWordSpaces(state, word, lineIndex, index) {
-  let chordLength = state.chordLyricMap[lineIndex].chords[index].length
-  console.log(state.chordLyricMap[lineIndex].chords[index])
-  console.log(chordLength)
-  console.log(word.length)
-  if (word.length == 0) {
-    console.log(`returning ${Math.abs(chordLength) + 1} `)
-    return Math.abs(chordLength) + 1
+function computeWordSpaces(state, chord, lineIndex, chordIndex) {
+  let wordLength = state.chordLyricMap[lineIndex].lyrics[chordIndex].length
+  if (wordLength == 0) {
+    return Math.abs(chord.length) + 1
   }
-  if (word.length > chordLength) {
-    return Math.abs(chordLength - word.length) + 1
+  if (wordLength < chord.length) {
+    return Math.abs(chord.length - wordLength) + 1
   }
   return 1
 }
@@ -34,14 +30,7 @@ function computeWordSpaces(state, word, lineIndex, index) {
 export default new Vuex.Store({
   state: {
     lyricArray: [],
-    chordLyricMap: [
-      {
-        chords: ["Cmaj7b5", ""],
-        chordSpaces: [1, 4],
-        lyrics: ["donut", "song"],
-        lyricSpaces: [3, 1],
-      },
-    ],
+    chordLyricMap: [],
     key: "",
     transpose: 0,
     enableTrans: true,
@@ -79,6 +68,7 @@ export default new Vuex.Store({
       // payload.structure = [chord, chordSpaces, word, wordSpaces]
       let index = payload.index
       let structure = ["chords", "chordSpaces", "lyrics", "lyricSpaces"]
+      state.chordLyricMap[index] = {}
       structure.forEach((entry) => {
         Vue.set(state.chordLyricMap[index], entry, payload.structure[entry])
       })
@@ -87,25 +77,28 @@ export default new Vuex.Store({
       let lineIndex = payload.lineIndex
       let chordIndex = payload.chordIndex
       let chord = payload.chord
-      state.chordLyricMap[lineIndex].chords.splice(chordIndex, 1, chord)
 
-      state.chordLyricMap[lineIndex].chordSpaces.splice(
+      let clm = state.chordLyricMap[lineIndex]
+
+      clm.chords.splice(chordIndex, 1, chord)
+      clm.chordSpaces.splice(
         chordIndex,
         1,
         computeChordSpaces(state, chord, lineIndex, chordIndex)
       )
+      clm.lyricSpaces.splice(
+        chordIndex,
+        1,
+        computeWordSpaces(state, chord, lineIndex, chordIndex)
+      )
+
+      Vue.set(state.chordLyricMap, lineIndex, clm)
     },
     updateLyrics(state, payload) {
       let lineIndex = payload.lineIndex
       let wordIndex = payload.wordIndex
       let word = payload.word
       state.chordLyricMap[lineIndex].lyrics.splice(wordIndex, 1, word)
-
-      state.chordLyricMap[lineIndex].lyricSpaces.splice(
-        wordIndex,
-        1,
-        computeWordSpaces(state, word, lineIndex, wordIndex)
-      )
     },
   },
   strict: debug,

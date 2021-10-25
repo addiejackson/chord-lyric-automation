@@ -1,7 +1,7 @@
 <template>
   <div>
-    <span class="lyric-container" v-for="(word, index) in lyrics" :key="index">
-      <span class="word" :style="'padding-right:' + lyricSpaces[index] + 'ch;'">{{ word }}</span>
+    <span class="lyric-container" v-for="(word, i) in lyrics" :key="i">
+      <span class="word" :style="'padding-right:' + lyricSpaces[i] + 'ch;'">{{ word }}</span>
     </span>
   </div>
 </template>
