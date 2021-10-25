@@ -14,19 +14,12 @@
 </template>
 
 <script>
-  import { EventBus } from "./EventBus.js";
   export default {
     data: () => ({
       chordBoxSize: 1,
       chordInput: "",
-      rootSet: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
       chordSuffix: "",
       chordBoxAlert: "",
-      root: "",
-      rootPos: 0,
-      missedTransposes: 0,
-      transposeCount: 0,
-      isLowercase: false,
     }),
     props: {
       incomingChord: String,
@@ -34,15 +27,8 @@
       lineIndex: Number,
       clearAll: Number,
     },
-    created() {
-      EventBus.$on("transposeChanged", transposeCount => {
-        this.transposeCount = transposeCount;
-        this.transpose();
-      });
-    },
     mounted() {
       if (this.incomingChord) {
-        console.log(this.incomingChord);
         this.chordInput = this.incomingChord;
         this.chordHandler();
       }
@@ -55,7 +41,6 @@
             this.chordBoxAlert = "";
             this.root = potentialRoot;
             this.$store.commit("enableTranspose");
-            // this.$emit("disableTranspose", false);
             return;
           }
           if (
@@ -65,77 +50,27 @@
             this.chordBoxAlert = "background-color:#DB848D;";
             this.root = null;
             this.$store.commit("disableTranspose");
-            // this.$emit("disableTranspose", true);
             return;
           }
           if (this.rootSet.includes(potentialRoot[0])) {
             this.chordBoxAlert = "";
             this.root = potentialRoot[0];
             this.$store.commit("enableTranspose");
-            // this.$emit("disableTranspose", false);
             return;
           }
           this.chordBoxAlert = "background-color:#DB848D;";
         }
         this.root = null;
       },
-      updateRootSet() {
-        if (this.accidental == "flat") {
-          this.rootSet = [
-            "C",
-            "Db",
-            "D",
-            "Eb",
-            "E",
-            "F",
-            "Gb",
-            "G",
-            "Ab",
-            "A",
-            "Bb",
-            "B",
-          ];
-        } else if (this.accidental == "sharp") {
-          this.rootSet = [
-            "C",
-            "C#",
-            "D",
-            "D#",
-            "E",
-            "F",
-            "F#",
-            "G",
-            "G#",
-            "A",
-            "A#",
-            "B",
-          ];
-        }
-        if (this.isLowercase) {
-          this.rootSet = this.rootSet.map(v => v.toLowerCase());
-        }
-      },
       getSuffix() {
         this.chordSuffix = this.chordInput.replace(this.root, "");
       },
       chordHandler() {
         this.resizeChordBox();
-        this.checkLowercase();
-        this.updateRootSet();
         this.validateRoot();
 
         if (this.root) {
-          this.indexRoot();
           this.getSuffix();
-          this.missedTransposes = this.transposeCount;
-        }
-      },
-      checkLowercase() {
-        let potentialRoot = this.chordInput.substring(0, 2);
-        if (potentialRoot === potentialRoot.toLowerCase()) {
-          this.isLowercase = true;
-        } else {
-          this.isLowercase = false;
         }
       },
       resizeChordBox() {
@@ -146,12 +81,12 @@
         }
       },
       indexRoot() {
-        this.rootPos = this.rootSet.indexOf(this.root);
+        this.rootPosition = this.rootSet.indexOf(this.root);
       },
       transpose() {
+        console.log("transposing");
         if (this.chordInput) {
-          let transposedPos =
-            this.rootPos + this.transposeCount - this.missedTransposes;
+          let transposedPos = this.rootPosition + this.transposeCount;
 
           // Ensure rootSet is a never-ending array
           transposedPos = transposedPos % 12;
@@ -160,8 +95,6 @@
           }
           this.chordInput = this.rootSet[transposedPos] + this.chordSuffix;
           this.resizeChordBox();
-        } else {
-          this.missedTransposes = this.transposeCount;
         }
       },
       transmuteRoot() {
@@ -172,8 +105,7 @@
         }
         if (this.root) {
           this.indexRoot();
-          this.updateRootSet();
-          this.root = this.rootSet[this.rootPos];
+          this.root = this.rootSet[this.rootPosition];
           this.chordInput = this.root + this.chordSuffix;
         }
       },
@@ -181,15 +113,8 @@
     watch: {
       incomingChord: function() {
         this.chordInput = this.incomingChord;
-        this.$store.commit("updateChords", {
-          lineIndex: this.lineIndex,
-          chordIndex: this.chordIndex,
-          chord: this.chordInput,
-        });
-        this.chordHandler();
       },
       chordInput() {
-        console.log("change");
         this.$store.commit("updateChords", {
           lineIndex: this.lineIndex,
           chordIndex: this.chordIndex,
@@ -200,6 +125,10 @@
       accidental: function() {
         this.transmuteRoot();
         this.chordHandler();
+      },
+      transposeCount: function() {
+        console.log("transposing");
+        this.transpose();
       },
       clearAll: function() {
         if (this.chordInput) {
@@ -225,6 +154,28 @@
       },
       accidental() {
         return this.$store.state.accidental;
+      },
+      rootSet() {
+        return this.$store.state.rootSet;
+      },
+      root: {
+        get() {
+          return this.$store.state.root;
+        },
+        set(root) {
+          this.$store.commit("updateRoot", root);
+        },
+      },
+      rootPosition: {
+        get() {
+          return this.$store.state.rootPosition;
+        },
+        set(rootPosition) {
+          this.$store.commit("updateRootPosition", rootPosition);
+        },
+      },
+      transposeCount() {
+        return this.$store.state.transposeCount;
       },
     },
   };

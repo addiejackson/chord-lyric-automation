@@ -31,11 +31,13 @@ export default new Vuex.Store({
   state: {
     lyricArray: [],
     chordLyricMap: [],
-    key: "",
-    transpose: 0,
-    enableTrans: true,
+    root: "",
+    rootPosition: 0,
+    transposeCount: 0,
+    enableTranspose: false,
     title: "",
     accidental: "flat",
+    rootSet: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
   },
   getters: {
     wordCount: (state) => (index) => {
@@ -44,10 +46,10 @@ export default new Vuex.Store({
   },
   mutations: {
     resetTranspose(state) {
-      state.transpose = 0
+      state.transposeCount = 0
     },
     updateTranspose(state, n) {
-      state.transpose += n
+      state.transposeCount += n
     },
     setLyrics(state, lyricArray) {
       state.lyricArray = lyricArray
@@ -57,12 +59,49 @@ export default new Vuex.Store({
     },
     setAccidental(state, accidental) {
       state.accidental = accidental
+      if (accidental == "flat") {
+        state.rootSet = [
+          "C",
+          "Db",
+          "D",
+          "Eb",
+          "E",
+          "F",
+          "Gb",
+          "G",
+          "Ab",
+          "A",
+          "Bb",
+          "B",
+        ]
+      } else if (accidental == "sharp") {
+        state.rootSet = [
+          "C",
+          "C#",
+          "D",
+          "D#",
+          "E",
+          "F",
+          "F#",
+          "G",
+          "G#",
+          "A",
+          "A#",
+          "B",
+        ]
+      }
+    },
+    updateRoot(state, root) {
+      state.root = root
+    },
+    updateRootPosition(state, rootPosition) {
+      state.rootPosition = rootPosition
     },
     disableTranspose(state) {
       state.enableTrans = false
     },
     enableTranspose(state) {
-      state.enableTrans = true
+      state.enableTranspose = true
     },
     updateChordLyricMap(state, payload) {
       // payload.structure = [chord, chordSpaces, word, wordSpaces]
