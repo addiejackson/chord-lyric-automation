@@ -19,7 +19,6 @@
   import ChordLine from "@/components/ChordLine.vue";
   import LyricLine from "@/components/LyricLine.vue";
   import { DismantleLyric } from "@/mixins/DismantleLyric.js";
-  // import { EventBus } from "./EventBus.js";
 
   export default {
     name: "ComboLine",
@@ -61,83 +60,6 @@
         this.chordLyricMap = defaultChordLyricMap;
 
         this.handleSoloChords(words);
-
-        // // If we know the incoming lyric doesn't end with
-        // // the present lyric, we replace the whole lyric
-        // // and associated chords originating from
-        // // chordboxes.
-        // if (!this.lyric.endsWith(this.currentLyric) || mounted) {
-        //   words.forEach((word, idx) => {
-        //     if (idx < this.cwMap.length) {
-        //       updatedCWMap.splice(idx, 1, {
-        //         word: word,
-        //         chord: "",
-        //       });
-        //     } else {
-        //       updatedCWMap.push({
-        //         word: word,
-        //         chord: "",
-        //       });
-        //     }
-        //   });
-        // }
-
-        // // If we can confirm that the new lyric ends with
-        // // the lyric it is replacing, we can push the
-        // // old lyric and prepend the new words of the new
-        // // lyric.
-        // if (this.lyric.endsWith(this.currentLyric) && !mounted) {
-        //   let oldWords = this.dismantleLyric(this.currentLyric);
-        //   let foundStart = false;
-        //   for (const [idx, word] of words.entries()) {
-        //     if (word == oldWords[0] && !foundStart) {
-        //       foundStart = true;
-        //     }
-        //     if (!foundStart) {
-        //       updatedCWMap.splice(idx, 0, {
-        //         word: word,
-        //         chord: "",
-        //       });
-        //     } else {
-        //       updatedCWMap.push(...this.cwMap);
-        //       break;
-        //     }
-        //   }
-        // }
-
-        // // This scrapes through the words and updates any
-        // // word starting with ">" to be blank. It then
-        // // takes the substringed chord and places it in the
-        // // CL Map.
-        // words.forEach((word, idx) => {
-        //   if (word[0] == ">") {
-        //     updatedCWMap.splice(idx, 1, {
-        //       word: "",
-        //       chord: word.substring(1),
-        //     });
-        //   }
-        // });
-
-        // this.cwMap = updatedCWMap;
-        // this.currentLyric = this.lyric;
-      },
-      computeChordSpaces(chord, index) {
-        if (chord.length == 0) {
-          return Math.abs(this.lyrics[index].length);
-        }
-        if (this.lyrics[index].length > chord.length) {
-          return Math.abs(this.lyrics[index].length - chord.length) + 1;
-        }
-        return 1;
-      },
-      computeWordSpaces(word, index) {
-        if (word.length == 0) {
-          return Math.abs(this.chords[index].length) + 1;
-        }
-        if (word.length > this.chords[index].length) {
-          return Math.abs(this.chords[index].length - word.length) + 1;
-        }
-        return 1;
       },
     },
     watch: {
@@ -186,26 +108,12 @@
             wordIndex: lyricInfo.index,
           };
           this.$store.commit("updateLyrics", payload);
-
-          // let spaces = this.computeWordSpaces(lyricInfo.word, lyricInfo.index);
-          // this.lyricSpaces = {
-          //   spaces: spaces,
-          //   wordIndex: lyricInfo.index,
-          // };
         },
       },
       lyricSpaces: {
         get() {
           return this.$store.state.chordLyricMap[this.index].lyricSpaces;
         },
-        // set(info) {
-        //   let payload = {
-        //     lineIndex: this.index,
-        //     spaces: info.spaces,
-        //     wordIndex: info.wordIndex,
-        //   };
-        //   this.$store.commit("updateLyricSpaces", payload);
-        // },
       },
       onlyChords: function() {
         if (this.lyrics) {

@@ -107,18 +107,6 @@ export default new Vuex.Store({
         computeWordSpaces(state, word, lineIndex, wordIndex)
       )
     },
-    // updateChordSpaces(state, payload) {
-    //   let lineIndex = payload.lineIndex
-    //   let chordIndex = payload.chordIndex
-    //   let spaces = payload.spaces
-    //   state.chordLyricMap[lineIndex].chordSpaces.splice(chordIndex, 1, spaces)
-    // },
-    // updateLyricSpaces(state, payload) {
-    //   let lineIndex = payload.lineIndex
-    //   let wordIndex = payload.wordIndex
-    //   let spaces = payload.spaces
-    //   state.chordLyricMap[lineIndex].lyricSpaces.splice(wordIndex, 1, spaces)
-    // },
   },
   strict: debug,
 })
