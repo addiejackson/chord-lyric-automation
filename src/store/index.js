@@ -31,8 +31,6 @@ export default new Vuex.Store({
   state: {
     lyricArray: [],
     chordLyricMap: [],
-    root: "",
-    rootPosition: 0,
     transposeCount: 0,
     enableTranspose: false,
     title: "",

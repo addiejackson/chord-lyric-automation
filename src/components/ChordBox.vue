@@ -20,6 +20,8 @@
       chordInput: "",
       chordSuffix: "",
       chordBoxAlert: "",
+      root: "",
+      rootPosition: 0,
     }),
     props: {
       incomingChord: String,
@@ -70,6 +72,7 @@
         this.validateRoot();
 
         if (this.root) {
+          this.indexRoot();
           this.getSuffix();
         }
       },
@@ -83,10 +86,9 @@
       indexRoot() {
         this.rootPosition = this.rootSet.indexOf(this.root);
       },
-      transpose() {
-        console.log("transposing");
+      transpose(n) {
         if (this.chordInput) {
-          let transposedPos = this.rootPosition + this.transposeCount;
+          let transposedPos = this.rootPosition + n;
 
           // Ensure rootSet is a never-ending array
           transposedPos = transposedPos % 12;
@@ -126,9 +128,8 @@
         this.transmuteRoot();
         this.chordHandler();
       },
-      transposeCount: function() {
-        console.log("transposing");
-        this.transpose();
+      transposeCount: function(newVal, oldVal) {
+        this.transpose(newVal - oldVal);
       },
       clearAll: function() {
         if (this.chordInput) {
@@ -157,22 +158,6 @@
       },
       rootSet() {
         return this.$store.state.rootSet;
-      },
-      root: {
-        get() {
-          return this.$store.state.root;
-        },
-        set(root) {
-          this.$store.commit("updateRoot", root);
-        },
-      },
-      rootPosition: {
-        get() {
-          return this.$store.state.rootPosition;
-        },
-        set(rootPosition) {
-          this.$store.commit("updateRootPosition", rootPosition);
-        },
       },
       transposeCount() {
         return this.$store.state.transposeCount;

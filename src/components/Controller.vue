@@ -259,19 +259,14 @@
       lyricsDone() {
         this.$store.commit("resetTranspose");
         this.$store.commit("setLyrics", this.lyrics.split("\n"));
-        // EventBus.$emit("resetTranspose");
-        // this.$emit("lyricsDone", this.lyricArray);
         this.clipboardIcon = "clipboard-outline";
       },
       titleEntered() {
         this.$store.commit("setTitle", this.title);
-        // this.$emit("titleEntered", this.title);
         this.clipboardIcon = "clipboard-outline";
       },
       transpose(direction) {
         this.$store.commit("updateTranspose", direction);
-        // this.transposeN += direction;
-        // EventBus.$emit("transposeChanged", this.transposeN);
       },
       copyText() {
         this.$emit("copyText");
@@ -279,7 +274,6 @@
       },
       emitAccidental() {
         this.$store.commit("setAccidental", this.accidental);
-        // EventBus.$emit("accidentalChanged", this.accidental);
         this.clipboardIcon = "clipboard-outline";
       },
     },
