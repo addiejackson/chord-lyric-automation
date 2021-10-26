@@ -36,37 +36,6 @@
       }
     },
     methods: {
-      validateRoot() {
-        if (this.chordInput) {
-          let potentialRoot = this.chordInput.substring(0, 2);
-          if (this.rootSet.includes(potentialRoot)) {
-            this.chordBoxAlert = "";
-            this.root = potentialRoot;
-            this.$store.commit("enableTranspose");
-            return;
-          }
-          if (
-            (potentialRoot[1] == "b" && this.accidental == "sharp") ||
-            (potentialRoot[1] == "#" && this.accidental == "flat")
-          ) {
-            this.chordBoxAlert = "background-color:#DB848D;";
-            this.root = null;
-            this.$store.commit("disableTranspose");
-            return;
-          }
-          if (this.rootSet.includes(potentialRoot[0])) {
-            this.chordBoxAlert = "";
-            this.root = potentialRoot[0];
-            this.$store.commit("enableTranspose");
-            return;
-          }
-          this.chordBoxAlert = "background-color:#DB848D;";
-        }
-        this.root = null;
-      },
-      getSuffix() {
-        this.chordSuffix = this.chordInput.replace(this.root, "");
-      },
       chordHandler() {
         this.resizeChordBox();
         this.validateRoot();
@@ -83,8 +52,44 @@
           this.chordBoxAlert = "";
         }
       },
+      validateRoot() {
+        if (this.chordInput) {
+          let potentialRoot = this.chordInput.substring(0, 2);
+          // If root is in the approved root set
+          if (this.rootSet.includes(potentialRoot)) {
+            this.chordBoxAlert = "";
+            this.root = potentialRoot;
+            this.$store.commit("enableTranspose");
+            return;
+          }
+
+          // Alert user if there's a flat/sharp mismatch
+          if (
+            (potentialRoot[1] == "b" && this.accidental == "sharp") ||
+            (potentialRoot[1] == "#" && this.accidental == "flat")
+          ) {
+            this.chordBoxAlert = "background-color:#DB848D;";
+            this.root = null;
+            this.$store.commit("disableTranspose");
+            return;
+          }
+
+          // If root is a natural, ignore #/b requirement
+          if (this.rootSet.includes(potentialRoot[0])) {
+            this.chordBoxAlert = "";
+            this.root = potentialRoot[0];
+            this.$store.commit("enableTranspose");
+            return;
+          }
+          this.chordBoxAlert = "background-color:#DB848D;";
+        }
+        this.root = null;
+      },
       indexRoot() {
         this.rootPosition = this.rootSet.indexOf(this.root);
+      },
+      getSuffix() {
+        this.chordSuffix = this.chordInput.replace(this.root, "");
       },
       transpose(n) {
         if (this.chordInput) {
@@ -100,13 +105,13 @@
         }
       },
       transmuteRoot() {
-        if (this.transposeCount != 0) {
-          // Transform root and capture it
-          this.validateRoot();
-          this.$store.commit("resetTranspose");
-        }
+        // if (this.transposeCount != 0) {
+        // Transform root and capture it
+        // this.validateRoot();
+        // this.$store.commit("resetTranspose");
+        // }
         if (this.root) {
-          this.indexRoot();
+          // this.indexRoot();
           this.root = this.rootSet[this.rootPosition];
           this.chordInput = this.root + this.chordSuffix;
         }
