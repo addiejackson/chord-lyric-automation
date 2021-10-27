@@ -222,7 +222,7 @@
               text
               block
               color="#5F917A"
-              :disabled="!lyricArray"
+              :disabled="disableCopy"
               v-bind="attrs"
               v-on="on"
               tabindex="5"
@@ -242,17 +242,17 @@
   export default {
     data: () => ({
       lyrics: "",
-      lyricArray: null,
       title: "",
-      // transposeN: 0,
       dialog: false,
       clipboardIcon: "clipboard-outline",
       accidental: "flat",
-      // disableTranspose: true,
     }),
     computed: {
       disableTranspose() {
         return !this.$store.state.enableTranspose;
+      },
+      disableCopy() {
+        return this.$store.state.lyricArray.length == 0;
       },
     },
     methods: {
@@ -285,15 +285,6 @@
         // or CREATED in a chord box, so we want
         // to capture the accidental as well.
         this.$store.commit("setAccidental", this.accidental);
-      });
-      EventBus.$on("chordChanged", () => {
-        for (const chordBox of document.querySelectorAll(".chordBox")) {
-          if (chordBox.value) {
-            return;
-          }
-        }
-        this.$store.commit("disableTranspose");
-        // this.disableTranspose = true;
       });
     },
   };

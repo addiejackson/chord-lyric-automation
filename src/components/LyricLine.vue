@@ -11,6 +11,7 @@
     name: "LyricLine",
     computed: {
       lyrics() {
+        console.log("updated lyrics");
         return this.$store.state.chordLyricMap[this.index].lyrics;
       },
       lyricSpaces() {

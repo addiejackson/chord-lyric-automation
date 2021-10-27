@@ -28,8 +28,8 @@
       clearAll: 0,
     }),
     props: {
-      lyric: String,
       index: Number,
+      lyric: String,
     },
     methods: {
       captureChords(chordInfo) {

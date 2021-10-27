@@ -33,6 +33,7 @@ export default new Vuex.Store({
     chordLyricMap: [],
     transposeCount: 0,
     enableTranspose: false,
+    enableCopy: false,
     title: "",
     accidental: "flat",
     rootSet: ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
@@ -105,10 +106,11 @@ export default new Vuex.Store({
       // payload.structure = [chord, chordSpaces, word, wordSpaces]
       let index = payload.index
       let structure = ["chords", "chordSpaces", "lyrics", "lyricSpaces"]
-      state.chordLyricMap[index] = {}
+      let clm = {}
       structure.forEach((entry) => {
-        Vue.set(state.chordLyricMap[index], entry, payload.structure[entry])
+        clm[entry] = payload.structure[entry]
       })
+      state.chordLyricMap.splice(index, 1, clm)
     },
     updateChords(state, payload) {
       let lineIndex = payload.lineIndex

@@ -27,7 +27,6 @@
       incomingChord: String,
       chordIndex: Number,
       lineIndex: Number,
-      clearAll: Number,
     },
     mounted() {
       if (this.incomingChord) {
@@ -136,28 +135,8 @@
       transposeCount: function(newVal, oldVal) {
         this.transpose(newVal - oldVal);
       },
-      clearAll: function() {
-        if (this.chordInput) {
-          this.chordInput = "";
-          this.chordHandler();
-        }
-      },
-      incomingChordAndClearAll: function(newVal, oldVal) {
-        const oldClearAll = oldVal.split("|")[1];
-        const [newIncomingChord, newClearAll] = newVal.split("|");
-        if (newClearAll != oldClearAll) {
-          this.chordInput = "";
-        }
-        if (newIncomingChord) {
-          this.chordInput = this.incomingChord;
-        }
-        this.chordHandler();
-      },
     },
     computed: {
-      incomingChordAndClearAll() {
-        return `${this.incomingChord}|${this.clearAll}`;
-      },
       accidental() {
         return this.$store.state.accidental;
       },
