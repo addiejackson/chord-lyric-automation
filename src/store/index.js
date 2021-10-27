@@ -54,6 +54,7 @@ export default new Vuex.Store({
       state.lyricArray = lyricArray
     },
     setTitle(state, title) {
+      console.log("Setting title")
       state.title = title
     },
     setAccidental(state, accidental) {

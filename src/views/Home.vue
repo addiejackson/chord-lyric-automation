@@ -1,6 +1,6 @@
 <template>
   <v-container class="py-0 mt-7" style="max-width:60%;">
-    <Controller @titleEntered="captureTitle" @copyText="copyText"></Controller>
+    <Controller @copyText="copyText"></Controller>
     <v-container ref="output">
       <v-row align="center" class="py-0 mt-7">
         <v-col>
@@ -28,19 +28,15 @@
   export default {
     name: "Home",
     mixins: [CopyChordsAndLyrics],
-    data: () => ({
-      title: "",
-      output: null,
-    }),
     computed: {
       lyricArray() {
         return this.$store.state.lyricArray;
       },
+      title() {
+        return this.$store.state.title;
+      },
     },
     methods: {
-      captureTitle(value) {
-        this.title = value;
-      },
       copyText() {
         let spans = this.$refs.output.querySelectorAll(
           "span:not(.lyric-container)",

@@ -262,6 +262,7 @@
         this.clipboardIcon = "clipboard-outline";
       },
       titleEntered() {
+        console.log("Title entered");
         this.$store.commit("setTitle", this.title);
         this.clipboardIcon = "clipboard-outline";
       },
