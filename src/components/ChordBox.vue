@@ -104,13 +104,7 @@
         }
       },
       transmuteRoot() {
-        // if (this.transposeCount != 0) {
-        // Transform root and capture it
-        // this.validateRoot();
-        // this.$store.commit("resetTranspose");
-        // }
         if (this.root) {
-          // this.indexRoot();
           this.root = this.rootSet[this.rootPosition];
           this.chordInput = this.root + this.chordSuffix;
         }

@@ -2,11 +2,9 @@
   <div>
     <div v-for="(chord, chordIndex) in chords" :key="chordIndex" class="sameLine">
       <ChordBox
-        @chordEntered="captureChord($event, index)"
         :style="'padding-right:' + chordSpaces[chordIndex] + 'ch;'"
         :incomingChord="chord"
         :chordIndex="chordIndex"
-        :clearAll="clearAll"
         :lineIndex="index"
       />
     </div>
@@ -16,30 +14,18 @@
 <script>
   import ChordBox from "@/components/ChordBox.vue";
   import { DismantleLyric } from "@/mixins/DismantleLyric.js";
-  import { EventBus } from "./EventBus.js";
 
   export default {
     name: "ChordLine",
     mixins: [DismantleLyric],
     data: () => ({
-      wordCount: 1,
-      badChords: null,
+      badChords: [false],
       badChordLine: false,
-      words: null,
     }),
     props: {
-      clearAll: Number,
       index: Number,
     },
     methods: {
-      captureChord(val, index) {
-        // if (!this.chords) {
-        //   this.chords = Array(this.incomingChords.length);
-        // }
-        // this.chords.splice(index, 1, val);
-        this.$emit("chordsEntered", { chord: val, index: index });
-        EventBus.$emit("resetCopy");
-      },
       andDisable(disable, index) {
         this.badChords.splice(index, 1, disable);
         this.badChordLine = this.badChords.some(badChord => badChord == true);
@@ -49,10 +35,6 @@
           this.$store.commit("enableTranspose");
         }
       },
-    },
-    mounted() {
-      this.badChords = Array(this.wordCount);
-      this.badChords.fill(false);
     },
     computed: {
       chordSpaces() {

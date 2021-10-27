@@ -238,7 +238,6 @@
 </template>
 
 <script>
-  import { EventBus } from "./EventBus.js";
   export default {
     data: () => ({
       lyrics: "",
@@ -277,16 +276,6 @@
         this.$store.commit("setAccidental", this.accidental);
         this.clipboardIcon = "clipboard-outline";
       },
-    },
-
-    created() {
-      EventBus.$on("resetCopy", () => {
-        this.clipboardIcon = "clipboard-outline";
-        // Reset fires on any time a chord is changed
-        // or CREATED in a chord box, so we want
-        // to capture the accidental as well.
-        this.$store.commit("setAccidental", this.accidental);
-      });
     },
   };
 </script>

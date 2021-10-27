@@ -2,7 +2,7 @@
   <v-container class="pa-0 my-0">
     <v-row>
       <v-col class="py-0 mt-0">
-        <ChordLine :clearAll="clearAll" :index="index" @chordsEntered="captureChords($event)" />
+        <ChordLine :index="index" />
       </v-col>
     </v-row>
     <v-row>
@@ -23,18 +23,11 @@
   export default {
     name: "ComboLine",
     mixins: [DismantleLyric],
-    data: () => ({
-      cwMap: [],
-      clearAll: 0,
-    }),
     props: {
       index: Number,
       lyric: String,
     },
     methods: {
-      captureChords(chordInfo) {
-        this.chords = chordInfo;
-      },
       handleSoloChords(words) {
         words.forEach((word, idx) => {
           if (word.startsWith(">")) {
