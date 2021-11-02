@@ -5,10 +5,7 @@
       <!-- page title -->
       <v-col class="pt-0 my-0 pb-3 pr-0" cols="9" align="left">
         <p>
-          <v-icon
-            style="vertical-align:middle;margin-bottom:5px; color:#5F917A;"
-            >mdi-music-note</v-icon
-          >
+          <v-icon style="vertical-align:middle;margin-bottom:5px; color:#5F917A;">mdi-music-note</v-icon>
           <b>Bowstring</b>
         </p>
 
@@ -31,14 +28,13 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title class="headline" primary-title
-              >Bowstring Help</v-card-title
-            >
+            <v-card-title class="headline" primary-title>Bowstring Help</v-card-title>
             <v-divider></v-divider>
             <v-card-text>
               <br />
               <b>To add a solo chordbox:</b> Type a ">" followed by the chord
-              (i.e. <code>>Gmaj7</code>).
+              (i.e.
+              <code>>Gmaj7</code>).
               <br />
               <b>To copy:</b> Click the clipboard icon.
               <br />
@@ -226,7 +222,7 @@
               text
               block
               color="#5F917A"
-              :disabled="!lyricArray"
+              :disabled="disableCopy"
               v-bind="attrs"
               v-on="on"
               tabindex="5"
@@ -242,92 +238,69 @@
 </template>
 
 <script>
-import { EventBus } from "./EventBus.js";
-export default {
-  data: () => ({
-    lyrics: "",
-    lyricArray: null,
-    title: "",
-    transposeN: 0,
-    dialog: false,
-    clipboardIcon: "clipboard-outline",
-    accidental: "flat",
-    disableTranspose: true,
-  }),
-
-  methods: {
-    lyricsDone() {
-      this.transposeN = 0;
-      this.lyricArray = this.lyrics.split("\n");
-      EventBus.$emit("resetTranspose");
-      this.$emit("lyricsDone", this.lyricArray);
-      this.clipboardIcon = "clipboard-outline";
+  export default {
+    data: () => ({
+      lyrics: "",
+      title: "",
+      dialog: false,
+      clipboardIcon: "clipboard-outline",
+      accidental: "flat",
+    }),
+    computed: {
+      disableTranspose() {
+        return !this.$store.state.enableTranspose;
+      },
+      disableCopy() {
+        return this.$store.state.lyricArray.length == 0;
+      },
     },
-    titleEntered() {
-      this.$emit("titleEntered", this.title);
-      this.clipboardIcon = "clipboard-outline";
+    methods: {
+      lyricsDone() {
+        this.$store.commit("resetTranspose");
+        this.$store.commit("setLyrics", this.lyrics.split("\n"));
+        this.clipboardIcon = "clipboard-outline";
+      },
+      titleEntered() {
+        console.log("Title entered");
+        this.$store.commit("setTitle", this.title);
+        this.clipboardIcon = "clipboard-outline";
+      },
+      transpose(direction) {
+        this.$store.commit("updateTranspose", direction);
+      },
+      copyText() {
+        this.$emit("copyText");
+        this.clipboardIcon = "clipboard-check";
+      },
+      emitAccidental() {
+        this.$store.commit("setAccidental", this.accidental);
+        this.clipboardIcon = "clipboard-outline";
+      },
     },
-    transpose(direction) {
-      this.transposeN += direction;
-      EventBus.$emit("transposeChanged", this.transposeN);
-    },
-    copyText() {
-      this.$emit("copyText");
-      this.clipboardIcon = "clipboard-check";
-    },
-    emitAccidental() {
-      EventBus.$emit("accidentalChanged", this.accidental);
-      this.clipboardIcon = "clipboard-outline";
-    },
-  },
-
-  created() {
-    EventBus.$on("disableTranspose", (dt) => {
-      this.disableTranspose = dt;
-    });
-    EventBus.$on("resetCopy", () => {
-      this.clipboardIcon = "clipboard-outline";
-      // Reset fires on any time a chord is changed
-      // or CREATED in a chord box, so we want
-      // to capture the accidental as well.
-      EventBus.$emit("accidentalChanged", this.accidental);
-    });
-    EventBus.$on("clearTranspose", () => {
-      this.transposeN = 0;
-    });
-    EventBus.$on("chordChanged", () => {
-      for (const chordBox of document.querySelectorAll(".chordBox")) {
-        if (chordBox.value) {
-          return;
-        }
-      }
-      this.disableTranspose = true;
-    });
-  },
-};
+  };
 </script>
 
 <style scoped>
-/* app title block */
-p {
-  float: left;
-  text-align: left;
-  font-size: 26px;
-  margin-bottom: 0px !important;
-}
+  /* app title block */
+  p {
+    float: left;
+    text-align: left;
+    font-size: 26px;
+    margin-bottom: 0px !important;
+  }
 
-/* title text field */
-.v-text-field {
-  font-family: "Courier New", Courier, monospace;
-  background-color: white;
-  border-radius: 2px;
-  border-color: #dcdcdc;
-  font-size: 14px;
-}
+  /* title text field */
+  .v-text-field {
+    font-family: "Courier New", Courier, monospace;
+    background-color: white;
+    border-radius: 2px;
+    border-color: #dcdcdc;
+    font-size: 14px;
+  }
 
-/* lyric input field */
-.v-textarea {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 14px;
-}
+  /* lyric input field */
+  .v-textarea {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 14px;
+  }
 </style>
